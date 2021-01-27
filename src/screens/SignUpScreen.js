@@ -1,8 +1,9 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Input, Icon, Button } from 'react-native-elements';
+import { Input, Button } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 
 export default class SignUpInput extends Component {
   constructor(props) {
@@ -24,6 +25,14 @@ export default class SignUpInput extends Component {
       password: '',
       confirmPass: '',
     };
+  }
+
+  handleFirstNameInput = (first_name) => {
+    this.setState({first_name:first_name});
+  }
+
+  handleLastNameInput = (last_name) => {
+    this.setState({last_name:last_name});
   }
 
   handleEmailInput = (email) => {
@@ -59,21 +68,21 @@ export default class SignUpInput extends Component {
         <View style={{width:'90%'}}>
             <Input
             value={this.state.first_name}
-            onChangeText={this.handleEmailInput}
+            onChangeText={this.handleFirstNameInput}
             inputStyle={{ color: '#36222D' }}
             label="First Name"
             labelStyle={{ color: '#36222D' }}
-            // leftIcon={<Icon name="account-outline" size={20} />}
+            leftIcon={<Icon name="account" size={20} />}
             placeholder="Alan"
             />
 
             <Input
             value={this.state.last_name}
-            onChangeText={this.handleEmailInput}
+            onChangeText={this.handleLastNameInput}
             inputStyle={{ color: '#36222D' }}
             label="Last Name"
             labelStyle={{ color: '#36222D' }}
-            // leftIcon={<Icon name="account-outline" size={20} />}
+            leftIcon={<Icon name="account" size={20} />}
             placeholder="Shearer"
             />
 
@@ -83,7 +92,7 @@ export default class SignUpInput extends Component {
             inputStyle={{ color: '#36222D' }}
             label="Email Address"
             labelStyle={{ color: '#36222D' }}
-            // leftIcon={<Icon name="account-outline" size={20} />}
+            leftIcon={<Icon name="email" size={20} />}
             placeholder="email@address.com"
             />
 
@@ -93,7 +102,7 @@ export default class SignUpInput extends Component {
             inputStyle={{ color: '#36222D' }}
             label="Password"
             labelStyle={{ color: '#36222D' }}
-            // leftIcon={<Icon name="account-outline" size={20} />}
+            leftIcon={<Icon name="lock" size={20} />}
             placeholder="Password"
             secureTextEntry
             />
@@ -104,7 +113,7 @@ export default class SignUpInput extends Component {
             inputStyle={{ color: '#36222D' }}
             label="Confirm Password"
             labelStyle={{ color: '#36222D' }}
-            // leftIcon={<Icon name="account-outline" size={20} />}
+            leftIcon={<Icon name="lock" size={20} />}
             placeholder="Confirm Password"
             secureTextEntry
             />

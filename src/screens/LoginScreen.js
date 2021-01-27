@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Input, Button, Image } from 'react-native-elements';
+import { ScrollView } from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 
 // eslint-disable-next-line react/prefer-stateless-function
 export default class LoginScreen extends Component {
@@ -39,7 +41,7 @@ export default class LoginScreen extends Component {
     const navigation = this.props.navigation;
 
     return (
-      <View style={{
+      <ScrollView style={{
         flex: 1, backgroundColor: '#845D3E', alignContent: 'center',
         }}>
           <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }}>
@@ -63,12 +65,13 @@ export default class LoginScreen extends Component {
 
           <View style={{ width: '90%', marginLeft: '5%' }}>
           <Input
+            placeholderTextColor='#36222D'
             value={this.state.email}
             onChangeText={this.handleEmailInput}
             /* Add theme manager and store this as base input for all input types*/
             containerStyle={{ marginTop: '10%' }}
             disabledInputStyle={{ background: '#ddd' }}
-            inputContainerStyle={{ color: '#36222D' }}
+            inputContainerStyle={{ borderColor: '#ECD2C7' }}
             errorMessage="Invalid email address"
             errorStyle={{}}
             errorProps={{}}
@@ -76,7 +79,7 @@ export default class LoginScreen extends Component {
             label="Email Address"
             labelStyle={{ color: '#36222D' }}
             labelProps={{}}
-            // leftIcon={<Icon name="account-outline" size={20} />}
+            leftIcon={<Icon name="email" size={20} />}
             leftIconContainerStyle={{}}
             rightIcon={{}}
             rightIconContainerStyle={{}}
@@ -84,10 +87,11 @@ export default class LoginScreen extends Component {
           />
 
           <Input
+            placeholderTextColor='#36222D'
             onChangeText={this.handlePasswordInput}
             containerStyle={{ marginTop: '5%' }}
             disabledInputStyle={{ background: '#ddd' }}
-            inputContainerStyle={{}}
+            inputContainerStyle={{ borderColor: '#ECD2C7' }}
             errorMessage="Invalid password"
             errorStyle={{}}
             errorProps={{}} /* isValidPassword */
@@ -95,7 +99,7 @@ export default class LoginScreen extends Component {
             label="Password"
             labelStyle={{ color: '#36222D' }}
             labelProps={{}}
-            // leftIcon={<Icon name="account-outline" size={20} />}
+            leftIcon={<Icon name="lock" size={20} />}
             leftIconContainerStyle={{}}
             rightIcon={{}}
             rightIconContainerStyle={{}}
@@ -117,7 +121,7 @@ export default class LoginScreen extends Component {
 
       </View>
     
-      </View>
+      </ScrollView>
 
 
     );
