@@ -51,6 +51,9 @@ export default class SignUpInput extends Component {
   }
 
   render() {
+
+    const navigation = this.props.navigation;
+
     return (
       <ScrollView style={{ flex: 1, backgroundColor:'#845D3E'}} contentContainerStyle={{justifyContent: 'space-evenly', alignItems: 'center'}}>
         <View style={{width:'90%'}}>
@@ -60,7 +63,7 @@ export default class SignUpInput extends Component {
             inputStyle={{ color: '#36222D' }}
             label="First Name"
             labelStyle={{ color: '#36222D' }}
-            leftIcon={<Icon name="account-outline" size={20} />}
+            // leftIcon={<Icon name="account-outline" size={20} />}
             placeholder="Alan"
             />
 
@@ -70,7 +73,7 @@ export default class SignUpInput extends Component {
             inputStyle={{ color: '#36222D' }}
             label="Last Name"
             labelStyle={{ color: '#36222D' }}
-            leftIcon={<Icon name="account-outline" size={20} />}
+            // leftIcon={<Icon name="account-outline" size={20} />}
             placeholder="Shearer"
             />
 
@@ -80,7 +83,7 @@ export default class SignUpInput extends Component {
             inputStyle={{ color: '#36222D' }}
             label="Email Address"
             labelStyle={{ color: '#36222D' }}
-            leftIcon={<Icon name="account-outline" size={20} />}
+            // leftIcon={<Icon name="account-outline" size={20} />}
             placeholder="email@address.com"
             />
 
@@ -90,7 +93,7 @@ export default class SignUpInput extends Component {
             inputStyle={{ color: '#36222D' }}
             label="Password"
             labelStyle={{ color: '#36222D' }}
-            leftIcon={<Icon name="account-outline" size={20} />}
+            // leftIcon={<Icon name="account-outline" size={20} />}
             placeholder="Password"
             secureTextEntry
             />
@@ -101,7 +104,7 @@ export default class SignUpInput extends Component {
             inputStyle={{ color: '#36222D' }}
             label="Confirm Password"
             labelStyle={{ color: '#36222D' }}
-            leftIcon={<Icon name="account-outline" size={20} />}
+            // leftIcon={<Icon name="account-outline" size={20} />}
             placeholder="Confirm Password"
             secureTextEntry
             />
