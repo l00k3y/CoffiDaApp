@@ -1,11 +1,11 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, ToastAndroid } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 
-export default class SignUpInput extends Component {
+export default class SignUpScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -57,6 +57,40 @@ export default class SignUpInput extends Component {
     //more validation
     this.setState({confirmPass:pass})
 
+  }
+
+  async signUp() {
+    
+    let to_send = {
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      email: this.state.email,
+      password: this.state.password,
+    };
+
+    try {
+      return fetch('http://10.0.2.2:3333/api/1.0.0/user', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        }, body: JSON.stringify(to_send),
+      })
+      .then((response) => {
+        if(response.status === 201) {
+          return response.json();
+        } else if(response.status === 400) {
+          throw 'Validation failed';
+        } else {
+          throw 'Server error';
+        }
+      })
+      .then((responseJson) => {
+        ToastAndroid.show(`New user ID: ${responseJson.user_id}`, ToastAndroid.SHORT);
+        this.props.navigation.navigate('Login'); //pass email as prop
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   render() {
@@ -123,12 +157,12 @@ export default class SignUpInput extends Component {
                     width: '100%', backgroundColor: '#ECD2C7',
                   }}
                 titleStyle={{ color: '#36222D', textAlign: 'center' }}
-                onPress={() => 
+                onPress={() => this.signUp()
                 /*  
                     Validate inputs onChange of inputs, set valid to true when both email + pw are valid, 
                     make API call for token, store token, show home screen
                 */ 
-                console.log('Email = ' + this.state.email + '\n Password = ' + this.state.password )
+                // console.log('Email = ' + this.state.email + '\n Password = ' + this.state.password )
                 } 
             />
         </View>

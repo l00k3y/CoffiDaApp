@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, ToastAndroid } from 'react-native';
 import { Input, Button, Image } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
+import { setSessionData, getSessionKey } from '../utils/LoginHelper'
 
 // eslint-disable-next-line react/prefer-stateless-function
 export default class LoginScreen extends Component {
@@ -18,6 +19,41 @@ export default class LoginScreen extends Component {
     }
   }
 
+  async login() {
+
+    //do validation
+
+    return fetch('http://10.0.2.2:3333/api/1.0.0/user/login', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(this.state),
+    })
+      .then((response) => {
+        if(response.status === 200) {
+          return response.json()
+        } else if(response.status === 400) {
+          throw 'Invalid credentials';
+        } else {
+          throw 'Server error';
+        }
+      })
+      .then(async (responseJson) => {
+        const loginObject = {};
+        loginObject.id = JSON.stringify(responseJson.id)
+        loginObject.token = responseJson.token
+        console.log('loginObject ' + loginObject.id + ' ' + loginObject.token )
+        setSessionData(loginObject);
+        this.props.navigation.navigate('Main');
+        ToastAndroid.show("Welcome", ToastAndroid.SHORT);
+      })
+      .catch((error) => {
+        ToastAndroid.show(error, ToastAndroid.SHORT);
+        console.error(error);
+      });
+  }
+
   handleEmailInput = (email) => {
     //do validation here
     if (email.length < 1) {
@@ -28,7 +64,6 @@ export default class LoginScreen extends Component {
       this.setState({email:email})
       console.log(email);
     }
-    
   }
 
   handlePasswordInput = (pass) => {
@@ -110,11 +145,11 @@ export default class LoginScreen extends Component {
           <Button title="Login" buttonStyle={{
               width: '100%', backgroundColor: '#ECD2C7', marginTop:'10%'
             }}
-            titleStyle={{ color: '#36222D', textAlign: 'center' }} onPress={() => 
+            titleStyle={{ color: '#36222D', textAlign: 'center' }} onPress={() => this.login()}
             /*  Validate inputs onChange of inputs, set valid to true when both email + pw are valid, 
                 make API call for token, store token, show home screen */ 
-            console.log('Email = ' + this.state.email + '\n Password = ' + this.state.password )
-          } />
+            // console.log('Email = ' + this.state.email + '\n Password = ' + this.state.password )
+           />
 
         </View>
 

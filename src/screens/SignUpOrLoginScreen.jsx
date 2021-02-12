@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Button, Image } from 'react-native-elements';
 
-export default class LandingScreen extends Component {
+export default class SignUpOrLoginScreen extends Component {
   render() {
     const { navigation } = this.props;
 
