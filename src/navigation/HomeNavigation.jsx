@@ -1,25 +1,21 @@
-// coffee shops
-// profile
-// about
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import MainScreen from '../screens/MainScreen';
 import ProfileNav from './ProfileNavigation';
-// import ProfileScreen from '../screens/ProfileScreen';
+import CoffeeShopNav from './CoffeeShopNavigation';
 
-const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function HomeNav() {
   return (
-    <Tab.Navigator
-      initialRouteName="Map"
-    >
-      <Tab.Screen name="Map" component={MainScreen} />
+    <Drawer.Navigator initialRouteName="Map">
+      <Drawer.Screen name="Coffee Shop Map" component={MainScreen} />
+      <Drawer.Screen name="List Coffee Shops" component={CoffeeShopNav} />
       {/* <Tab.Screen name="List" component={MainScreen} /> */}
-      <Tab.Screen name="Profile" component={ProfileNav} />
+      <Drawer.Screen name="Profile" component={ProfileNav} />
       {/* <Tab.Screen name="About" component={MainScreen} /> */}
-    </Tab.Navigator>
+    </Drawer.Navigator>
 
   );
 }

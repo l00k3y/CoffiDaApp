@@ -13,10 +13,11 @@ export default function ProfileNav() {
   //   this.navigation.navigate('nextScreen')/
     <Stack.Navigator
       initialRouteName="Profile"
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ headerStyle: { backgroundColor: '#ECD2C7', elevation: 0 } }}
+      // screenOptions={{ headerShown: false }} ECD2C7
     >
-      <Stack.Screen name="Profile" component={ProfileScreen} screenOptions={{ headerShown: true }} />
-      <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} />
+      <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{ headerTitleAlign: 'center', headerTitle: 'Update Profile'}} />
       {/* include edit details, profileScreen includes logout */}
       {/* My reviews */}
     </Stack.Navigator>

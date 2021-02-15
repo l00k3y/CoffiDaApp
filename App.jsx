@@ -12,27 +12,33 @@ class CoffiDaApp extends Component {
     super(props);
     this.state = {
       ready: false,
-      loginObject: {},
+      // loginObject: {},
     };
   }
 
   componentDidMount() {
-    this.isLoggedIn();
-  }
-
-  isLoggedIn() {
     getSessionData()
       .then((x) => {
-        this.setState({ loginObject: x, ready: true });
-        if (x !== null) {
-          // send to main app
-          // navigation.navigate('Main');
+        this.setState({ ready: true });
+        if (x.token !== null) {
+          console.log(x);
           ToastAndroid.show('Welcome back!', ToastAndroid.SHORT);
-          // return (<MainScreen />);
         }
-        // send to sign up or login
       });
   }
+
+  // isLoggedIn() {
+  //   getSessionData()
+  //     .then((x) => {
+  //       console.log(x);
+  //       this.setState({ loginObject: x, });
+  //       if (x.token !== null) {
+  //         // this.navigation.navigate('Main');
+  //         // return (<MainScreen />);
+  //       }
+  //       // send to sign up or login
+  //     });
+  // }
 
   render() {
     if (this.state.ready === false) {

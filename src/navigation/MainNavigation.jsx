@@ -23,7 +23,7 @@ export default function App() {
         <Stack.Screen name="Home" component={SignUpOrLoginScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="Main" component={MainNav} />
+        <Stack.Screen name="Main" component={MainNav} options={{ headerShown: false }} />
         {/* needs to be main navigator */}
       </Stack.Navigator>
     </NavigationContainer>

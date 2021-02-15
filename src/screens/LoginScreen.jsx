@@ -1,39 +1,58 @@
 /* eslint-disable react/jsx-filename-extension */
-import React, { Component } from 'react';
+import React from 'react';
 import { View, ToastAndroid } from 'react-native';
 import { Input, Button, Image } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import { setSessionData, getSessionKey } from '../utils/LoginHelper'
+import ValidationComponent from 'react-native-form-validator';
+import { setSessionData } from '../utils/LoginHelper'
 
 // eslint-disable-next-line react/prefer-stateless-function
-export default class LoginScreen extends Component {
+export default class LoginScreen extends ValidationComponent {
 
   constructor(props){
     super(props);
 
-    /* Send email and password in json object to API, API returns token, store token in async storage, set isSignedIn to true and load home page*/ 
+    /* Send email and password in json object to API, API returns token, store token in async storage, set isSignedIn to true and load home page */ 
     this.state = {
       email: '',
       password: ''
     }
   }
 
+  handleEmailInput = (inpEmail) => {
+      this.setState({email: inpEmail})
+  }
+
+  handlePasswordInput = (pass) => {
+    // do validation here
+    this.setState({password:pass})
+  }
+
+  onSubmit() {
+    this.validate({
+      email: {required: true, email: true },
+      password: {minlength: 5, required: true},
+    });
+    console.log(this.getErrorMessages());
+  }
+
   async login() {
 
-    //do validation
-
-    return fetch('http://10.0.2.2:3333/api/1.0.0/user/login', {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(this.state),
-    })
+    this.onSubmit();
+    
+    if(this.isFormValid()) {
+      return fetch('http://10.0.2.2:3333/api/1.0.0/user/login', {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this.state),
+      })
       .then((response) => {
-        if(response.status === 200) {
+        if (response.status === 200) {
           return response.json()
-        } else if(response.status === 400) {
+        } if (response.status === 400) {
           throw 'Invalid credentials';
         } else {
           throw 'Server error';
@@ -43,37 +62,21 @@ export default class LoginScreen extends Component {
         const loginObject = {};
         loginObject.id = JSON.stringify(responseJson.id)
         loginObject.token = responseJson.token
-        console.log('loginObject ' + loginObject.id + ' ' + loginObject.token )
         setSessionData(loginObject);
         this.props.navigation.navigate('Main');
         ToastAndroid.show("Welcome", ToastAndroid.SHORT);
       })
       .catch((error) => {
         ToastAndroid.show(error, ToastAndroid.SHORT);
-        console.error(error);
       });
-  }
-
-  handleEmailInput = (email) => {
-    //do validation here
-    if (email.length < 1) {
-      console.log("too short")
-      console.log(email.length)
-      this.setState({email:email})
-    } else {
-      this.setState({email:email})
-      console.log(email);
-    }
-  }
-
-  handlePasswordInput = (pass) => {
-    //do validation here
-    this.setState({password:pass})
+    } 
+    const errMessage = this.getErrorMessages('\n');
+    ToastAndroid.show(errMessage, ToastAndroid.SHORT);
   }
 
   render() {
 
-    const navigation = this.props.navigation;
+    const {navigation} = this.props;
 
     return (
       <ScrollView style={{
@@ -85,17 +88,7 @@ export default class LoginScreen extends Component {
               style={{ width: 150, height: 200 }}
             />
           </View>
-        
-              {/* <Text>
-                {' '}
-                itemId:
-                {JSON.stringify(itemId)}
-              </Text>
-              <Text>
-                otherParam:
-                {JSON.stringify(otherParam)}
-        
-              </Text> */}
+
         <View style={{ flex: 8 }}>
 
           <View style={{ width: '90%', marginLeft: '5%' }}>
@@ -103,11 +96,11 @@ export default class LoginScreen extends Component {
             placeholderTextColor='#36222D'
             value={this.state.email}
             onChangeText={this.handleEmailInput}
-            /* Add theme manager and store this as base input for all input types*/
+            /* Add theme manager and store this as base input for all input types */
             containerStyle={{ marginTop: '10%' }}
             disabledInputStyle={{ background: '#ddd' }}
             inputContainerStyle={{ borderColor: '#ECD2C7' }}
-            errorMessage="Invalid email address"
+            errorMessage="Required. Must be valid email"
             errorStyle={{}}
             errorProps={{}}
             inputStyle={{ color: '#36222D' }}
@@ -127,7 +120,7 @@ export default class LoginScreen extends Component {
             containerStyle={{ marginTop: '5%' }}
             disabledInputStyle={{ background: '#ddd' }}
             inputContainerStyle={{ borderColor: '#ECD2C7' }}
-            errorMessage="Invalid password"
+            errorMessage="Required. Must have more than 4 characters"
             errorStyle={{}}
             errorProps={{}} /* isValidPassword */
             inputStyle={{}}

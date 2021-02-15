@@ -1,8 +1,7 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
-import { View, Text, ToastAndroid } from 'react-native';
-import PropTypes from 'prop-types';
-import { Input, Button, Image } from 'react-native-elements';
+import { View, ToastAndroid } from 'react-native';
+import { Button } from 'react-native-elements';
 import { getSessionData, clearSessionData } from '../../utils/LoginHelper';
 
 export default class ProfileScreen extends Component {
@@ -44,40 +43,6 @@ export default class ProfileScreen extends Component {
         console.log(error);
       });
   }
-
-  //   logout() {
-  //     // console.log('hello');
-
-  //     // clear async storage and send back to landing screen
-  //     // const val = '';
-  //     getSessionKey()
-  //       .then((val) => fetch('http://10.0.2.2:3333/api/1.0.0/user/logout', {
-  //         method: 'post',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'X-Authorization': val,
-  //         },
-  //       })
-  //         .then((response) => {
-  //           if (response.status === 200) {
-  //             return response.json();
-  //           } if (response.status === 401) {
-  //             throw 'Unauthorised';
-  //           } else {
-  //             throw 'Server error';
-  //           }
-  //         })
-  //         .then({
-  //         //   console.log("Hello");
-  //         // setSessionKey("");
-  //         // navigation.navigate('')
-  //         // ToastAndroid.show('Welcome', ToastAndroid.SHORT);
-  //         })
-  //         .catch((error) => {
-  //           ToastAndroid.show(error, ToastAndroid.SHORT);
-  //           console.error(error);
-  //         }));
-  //   }
 
   render() {
     const { navigation } = this.props;

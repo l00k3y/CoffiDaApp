@@ -1,101 +1,97 @@
 /* eslint-disable react/prefer-stateless-function */
-import React, { Component } from 'react';
+import React from 'react';
 import { View, ToastAndroid } from 'react-native';
 import { Input, Button } from 'react-native-elements';
+import ValidationComponent from 'react-native-form-validator';
 import { ScrollView } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 
-export default class SignUpScreen extends Component {
+export default class SignUpScreen extends ValidationComponent {
   constructor(props) {
     super(props);
 
-    /*
-        Validate details
-        Send details in json object to API
-        API checks for existing email
-        if none in db then create account
-        show error if otherwise
-        show toast saying account created
-        show home
-    */
     this.state = {
-      first_name: '',
-      last_name: '',
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
       confirmPass: '',
     };
   }
 
-  handleFirstNameInput = (first_name) => {
-    this.setState({first_name:first_name});
+  onSubmit() {
+    this.validate({
+      firstName: { required: true },
+      lastName: { required: true },
+      email: { required: true, email: true },
+      password: { required: true, minlength: 5 },
+      confirmPass: { required: true, equalPassword: this.state.password }
+    });
   }
 
-  handleLastNameInput = (last_name) => {
-    this.setState({last_name:last_name});
+  handleFirstNameInput = (inpFirstName) => {
+    this.setState({firstName: inpFirstName});
   }
 
-  handleEmailInput = (email) => {
-    //do validation here
-    if (email.length < 1) {
-      console.log("too short")
-      console.log(email.length)
-      this.setState({email:email})
-    } else {
-      this.setState({email:email})
-      console.log(email);
-    }
-    
+  handleLastNameInput = (inpLastName) => {
+    this.setState({lastName: inpLastName});
+  }
+
+  handleEmailInput = (inpEmail) => {
+      this.setState({email: inpEmail})    
   }
 
   handlePasswordInput = (pass) => {
-    //do validation here
     this.setState({password:pass})
   }
 
   handleConfirmPasswordInput = (pass) => {
-    //more validation
     this.setState({confirmPass:pass})
-
   }
 
   async signUp() {
     
-    let to_send = {
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      email: this.state.email,
-      password: this.state.password,
-    };
+    this.onSubmit()
+    if (this.isFormValid()) {
 
-    try {
-      return fetch('http://10.0.2.2:3333/api/1.0.0/user', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-        }, body: JSON.stringify(to_send),
-      })
-      .then((response) => {
-        if(response.status === 201) {
-          return response.json();
-        } else if(response.status === 400) {
-          throw 'Validation failed';
-        } else {
-          throw 'Server error';
-        }
-      })
-      .then((responseJson) => {
-        ToastAndroid.show(`New user ID: ${responseJson.user_id}`, ToastAndroid.SHORT);
-        this.props.navigation.navigate('Login'); //pass email as prop
-      });
-    } catch (error) {
-      console.error(error);
-    }
+      const toSend = {
+        first_name: this.state.first_name,
+        last_name: this.state.last_name,
+        email: this.state.email,
+        password: this.state.password,
+      };
+
+      try {
+        return fetch('http://10.0.2.2:3333/api/1.0.0/user', {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+          }, body: JSON.stringify(toSend),
+        })
+        .then((response) => {
+          if(response.status === 201) {
+            return response.json();
+          } if(response.status === 400) {
+            ToastAndroid.show(`Validation failed`, ToastAndroid.SHORT);
+          } else {
+            ToastAndroid.show(`Server error`, ToastAndroid.SHORT);
+          }
+        })
+        .then((responseJson) => {
+          ToastAndroid.show(`New user ID: ${responseJson.user_id}`, ToastAndroid.SHORT);
+          this.props.navigation.navigate('Login'); // pass email as prop
+        });
+      } catch (error) {
+        console.error(error);
+      } 
+    } if (!this.isFormValid()) {
+      ToastAndroid.show(this.getErrorMessages("\n"), ToastAndroid.SHORT);
+    } 
   }
 
   render() {
 
-    const navigation = this.props.navigation;
+    const {navigation} = this.props;
 
     return (
       <ScrollView style={{ flex: 1, backgroundColor:'#845D3E'}} contentContainerStyle={{justifyContent: 'space-evenly', alignItems: 'center'}}>
@@ -157,13 +153,7 @@ export default class SignUpScreen extends Component {
                     width: '100%', backgroundColor: '#ECD2C7',
                   }}
                 titleStyle={{ color: '#36222D', textAlign: 'center' }}
-                onPress={() => this.signUp()
-                /*  
-                    Validate inputs onChange of inputs, set valid to true when both email + pw are valid, 
-                    make API call for token, store token, show home screen
-                */ 
-                // console.log('Email = ' + this.state.email + '\n Password = ' + this.state.password )
-                } 
+                onPress={() => this.signUp()} 
             />
         </View>
 

@@ -2,12 +2,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export async function setSessionData(loginObject) {
   try {
-    // session_token
-    // holds user id as well as session token
     await AsyncStorage.setItem('id', loginObject.id);
     await AsyncStorage.setItem('token', loginObject.token);
   } catch (e) {
-    // log error
     console.log(e);
   }
 }
@@ -23,8 +20,6 @@ export async function getSessionData() {
     }
     return '';
   } catch (e) {
-    // error reading value
-    // log error
     console.log(e);
     return 'Failed';
   }
