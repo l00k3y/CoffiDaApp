@@ -20,6 +20,12 @@ export default class LoginScreen extends ValidationComponent {
     }
   }
 
+  componentDidMount() {
+    if(this.props.route.params !== null) {
+      this.handleEmailInput(this.props.route.params.email);
+    }
+  }
+
   handleEmailInput = (inpEmail) => {
       this.setState({email: inpEmail})
   }

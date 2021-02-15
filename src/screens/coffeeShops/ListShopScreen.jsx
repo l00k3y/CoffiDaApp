@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, ToastAndroid, Text, TouchableHighlight } from 'react-native';
 import { Button, ListItem, AirbnbRating } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
+import { commonStyles } from '../../styles/common';
 import { getSessionData, clearSessionData } from '../../utils/LoginHelper';
 
 import LoadingScreen from '../LoadingScreen'
@@ -58,7 +59,7 @@ export default class ListShopScreen extends Component {
     }
     return (
       <View style={{ flex: 1, backgroundColor: '#845D3E' }} contentContainerStyle={{ justifyContent: 'space-evenly', alignItems: 'center' }}>
-        <Text>Loaded</Text>
+        <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', padding: '2%' }}>Tap on an item for more info</Text>
         <FlatList
             data={this.state.shopData}
             renderItem={({item}) => {
@@ -94,9 +95,6 @@ export default class ListShopScreen extends Component {
                         "Good",
                         "Great"
                       ]}
-                      onFinishRating={() =>
-                        console.log("onFinishRating()")
-                      }
                       showRating
                       isDisabled
                     />

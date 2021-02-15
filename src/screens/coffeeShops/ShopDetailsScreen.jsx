@@ -1,11 +1,14 @@
 import React from 'react';
-import { View, ToastAndroid, Text, Component } from 'react-native';
+import { View, ToastAndroid, Text, Component , StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Input, Button, Image } from 'react-native-elements';
+import { Input, Button, Image, Divider } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import ValidationComponent from 'react-native-form-validator';
 import { getSessionData } from '../../utils/LoginHelper';
 import LoadingScreen from '../LoadingScreen';
+
+
+import { commonStyles } from "../../styles/common";
 
 export default class ShopDetailsScreen extends ValidationComponent {
 
@@ -65,20 +68,31 @@ export default class ShopDetailsScreen extends ValidationComponent {
     } 
     return (
       <ScrollView style={{ flex: 1, backgroundColor: '#845D3E' }}>
+
+        <View style={{ flex: 8, flexDirection: 'row', border:'5px solid red', marginTop: '2%' }}> 
+
+          <View style={{ flex: 3, alignItems: 'center', justifyContent:'center' }}> 
+            <Text style={commonStyles.titleText}>{this.state.shopData.location_name}</Text>
+            <Text>{this.state.shopData.location_town}</Text>
+          </View>
+          
+          <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center'}}> 
+            <Image
+            source={{ uri : this.state.shopData.photo_path }}
+            style={{ width: 120, height: 120 }}/>
+          </View>
+        </View>
+
+        <Divider style={{ backgroundColor: 'black' }} />
         
+
+        <View style={{ flex: 4 }}> 
+          <Text style={commonStyles.headerStyle}>Ratings</Text>
+          <Text>{this.state.shopData.location_town}</Text>
+          <Text>{this.state.shopData.location_town}</Text>
+          <Text>{this.state.shopData.location_town}</Text>
+        </View>
         
-        <Text>{this.state.shopData.location_name}</Text>
-        <Text>{this.state.shopData.location_town}</Text>
-
-        <Image
-          source={{ uri : this.state.shopData.photo_path }}
-          style={{ width: 150, height: 200 }}
-        />
-
-        <Text>{this.state.shopData.location_town}</Text>
-        <Text>{this.state.shopData.location_town}</Text>
-        <Text>{this.state.shopData.location_town}</Text>
-
         
       </ScrollView>
     );

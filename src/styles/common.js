@@ -5,8 +5,9 @@ const commonStyles = StyleSheet.create({
     fontFamily: 'Cochin',
   },
   titleText: {
-    fontSize: 20,
+    fontSize: 26,
     fontWeight: 'bold',
+    paddingBottom: '2%',
   },
   mainView: {
     flex: 1,
@@ -15,6 +16,12 @@ const commonStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  mainContentView: {
+    flex: 1,
+    flexDirection: 'column',
+    width: '90%',
+    backgroundColor: '#845D3E',
+  },
   textInput: {
     width: '90%',
     backgroundColor: '#845D3E',
@@ -22,6 +29,10 @@ const commonStyles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 8,
     padding: '1%',
+  },
+  headerStyle: {
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

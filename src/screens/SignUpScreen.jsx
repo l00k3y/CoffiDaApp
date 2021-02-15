@@ -24,7 +24,7 @@ export default class SignUpScreen extends ValidationComponent {
       firstName: { required: true },
       lastName: { required: true },
       email: { required: true, email: true },
-      password: { required: true, minlength: 5 },
+      password: { required: true, minlength: 6 },
       confirmPass: { required: true, equalPassword: this.state.password }
     });
   }
@@ -55,8 +55,8 @@ export default class SignUpScreen extends ValidationComponent {
     if (this.isFormValid()) {
 
       const toSend = {
-        first_name: this.state.first_name,
-        last_name: this.state.last_name,
+        first_name: this.state.firstName,
+        last_name: this.state.lastName,
         email: this.state.email,
         password: this.state.password,
       };
@@ -78,8 +78,8 @@ export default class SignUpScreen extends ValidationComponent {
           }
         })
         .then((responseJson) => {
-          ToastAndroid.show(`New user ID: ${responseJson.user_id}`, ToastAndroid.SHORT);
-          this.props.navigation.navigate('Login'); // pass email as prop
+          ToastAndroid.show(`Please sign in`, ToastAndroid.SHORT);
+          this.props.navigation.navigate('Login', {email: this.state.email}); // pass email as prop
         });
       } catch (error) {
         console.error(error);
