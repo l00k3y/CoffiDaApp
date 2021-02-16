@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { View, ToastAndroid, Text, TouchableHighlight } from 'react-native';
+import { View, Text, TouchableHighlight } from 'react-native';
 import { Button, ListItem, AirbnbRating } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import { commonStyles } from '../../styles/common';
-import { getSessionData, clearSessionData } from '../../utils/LoginHelper';
+import { getSessionData } from '../../utils/LoginHelper';
 
 import LoadingScreen from '../LoadingScreen'
 
@@ -46,10 +46,8 @@ export default class ListShopScreen extends Component {
   };
 
   loadShopDetails(shopID) {
-    // console.log('shopID ' + shopID);
     this.props.navigation.navigate('ShopDetails', {shopIdentifier: shopID})
   }
-
 
   render() {
     if (this.state.isLoading === true) {
@@ -59,11 +57,11 @@ export default class ListShopScreen extends Component {
     }
     return (
       <View style={{ flex: 1, backgroundColor: '#845D3E' }} contentContainerStyle={{ justifyContent: 'space-evenly', alignItems: 'center' }}>
-        <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', padding: '2%' }}>Tap on an item for more info</Text>
+        <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', padding: '2%' }}>Tap an item for more info</Text>
         <FlatList
+            style={commonStyles.contentStyle}
             data={this.state.shopData}
-            renderItem={({item}) => {
-              return (
+            renderItem={({item}) => 
                 <ListItem
                   bottomDivider
                   Component={TouchableHighlight}
@@ -85,7 +83,6 @@ export default class ListShopScreen extends Component {
 
                   <AirbnbRating
                       size={10}
-                      style={{ fontSize: '10px' }}
                       count={5}
                       defaultRating={item.avg_overall_rating}
                       reviews={[
@@ -99,20 +96,8 @@ export default class ListShopScreen extends Component {
                       isDisabled
                     />
                 </ListItem>
-                // <View>
-                //   <Text></Text>
-                //   <Button
-                //     title=""
-                //     onPress={() => this.deleteItem(item.id)}
-                //   />
-                //   <Button
-                //     title="Update"
-                //     onPress={() => this.getItem(item.id)}
-                //   />
-                // </View>
-              );
-            }}
-            keyExtractor={({id}) => id}
+            }
+            keyExtractor={(item) => item.location_id.toString()}
           />
       </View>  
     );

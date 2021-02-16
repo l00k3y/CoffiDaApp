@@ -1,8 +1,9 @@
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
 import { View, ToastAndroid } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, Image } from 'react-native-elements';
 import { getSessionData, clearSessionData } from '../../utils/LoginHelper';
+import { commonStyles } from "../../styles/common";
 
 export default class ProfileScreen extends Component {
   constructor(props) {
@@ -48,28 +49,53 @@ export default class ProfileScreen extends Component {
     const { navigation } = this.props;
 
     return (
-
-      <View>
+      <View style={commonStyles.mainView}>
+        <View style={commonStyles.mainContentView}>
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Image
+                source={require('../../assets/images/transpLogo2.png')}
+                style={{ width: 150, height: 200 }}
+              />
+          </View>
         <Button
-          title="Update Profile"
-          buttonStyle={{
-            width: '100%', backgroundColor: '#ECD2C7', marginTop: '10%',
-          }}
-          titleStyle={{ color: '#36222D', textAlign: 'center' }}
-          onPress={() => navigation.navigate('UpdateProfile')}
-        />
+            title="My Reviews"
+            buttonStyle={{
+              width: '100%', backgroundColor: '#ECD2C7', marginTop: '10%',
+            }}
+            titleStyle={{ color: '#36222D', textAlign: 'center' }}
+            onPress={() => console.log("")}
+          />
 
-        <Button
-          title="Logout"
-          buttonStyle={{
-            width: '100%', backgroundColor: '#ECD2C7', marginTop: '10%',
-          }}
-          titleStyle={{ color: '#36222D', textAlign: 'center' }}
-          onPress={() => this.logout()}
-            // this.logout()}
-        />
+          <Button
+            title="My Favourite Locations"
+            buttonStyle={{
+              width: '100%', backgroundColor: '#ECD2C7', marginTop: '10%',
+            }}
+            titleStyle={{ color: '#36222D', textAlign: 'center' }}
+            onPress={() => console.log("")}
+          />
 
+
+          <Button
+            title="Update Profile"
+            buttonStyle={{
+              width: '100%', backgroundColor: '#ECD2C7', marginTop: '10%',
+            }}
+            titleStyle={{ color: '#36222D', textAlign: 'center' }}
+            onPress={() => navigation.navigate('UpdateProfile')}
+          />
+
+          <Button
+            title="Logout"
+            buttonStyle={{
+              width: '100%', backgroundColor: '#ECD2C7', marginTop: '10%',
+            }}
+            titleStyle={{ color: '#36222D', textAlign: 'center' }}
+            onPress={() => this.logout()}
+          />
+        </View>
       </View>
+      
     );
   }
 }

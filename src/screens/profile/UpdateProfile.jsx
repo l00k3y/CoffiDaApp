@@ -139,6 +139,7 @@ export default class UpdateProfileScreen extends ValidationComponent {
     } catch (error) {
       ToastAndroid.show(error, ToastAndroid.SHORT);
     }
+    return '';
   }
 
   render() {

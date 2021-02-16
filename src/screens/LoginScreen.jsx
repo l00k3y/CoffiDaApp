@@ -80,8 +80,10 @@ export default class LoginScreen extends ValidationComponent {
     ToastAndroid.show(errMessage, ToastAndroid.SHORT);
   }
 
-  render() {
+  
 
+  render() {
+    
     const {navigation} = this.props;
 
     return (

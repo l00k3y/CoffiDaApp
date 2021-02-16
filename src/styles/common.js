@@ -21,6 +21,7 @@ const commonStyles = StyleSheet.create({
     flexDirection: 'column',
     width: '90%',
     backgroundColor: '#845D3E',
+    justifyContent: 'center',
   },
   textInput: {
     width: '90%',
@@ -33,6 +34,20 @@ const commonStyles = StyleSheet.create({
   headerStyle: {
     fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
+    paddingTop: 10,
+  },
+  contentStyle: {
+    width: '90%', 
+    marginLeft: '5%',
+  },
+  ratingItemStyle: {
+    flex: 1, 
+    paddingTop: 15, 
+    paddingHorizontal: 10, 
+    flexDirection: "row", 
+    justifyContent:'center', 
+    alignItems: "center"
   },
 });
 
