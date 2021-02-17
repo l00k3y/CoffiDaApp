@@ -125,7 +125,7 @@ export default class UpdateProfileScreen extends ValidationComponent {
           ToastAndroid.show('User not found', ToastAndroid.SHORT);
         } else {
           ToastAndroid.show('Server error', ToastAndroid.SHORT);
-        }
+        } return '';
       })
       .then((responseJson) => {
         this.setState({

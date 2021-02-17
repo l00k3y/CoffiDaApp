@@ -1,15 +1,12 @@
 import React from 'react';
-import { View, ToastAndroid, Text, Component , StyleSheet ,  } from 'react-native';
+import { View, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Input, Button, Image, Divider, CheckBox } from 'react-native-elements';
+import { Button, Image, Divider, CheckBox } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import ValidationComponent from 'react-native-form-validator';
 import { getSessionData } from '../../utils/LoginHelper';
 import LoadingScreen from '../LoadingScreen';
-
-
 import { commonStyles } from "../../styles/common";
-
 
 export default class ShopDetailsScreen extends ValidationComponent {
 
@@ -59,6 +56,7 @@ export default class ShopDetailsScreen extends ValidationComponent {
     } catch (error) {
       console.error(error);
     }
+    return '';
   }
 
   checkFavouriteLocation() {
@@ -84,11 +82,12 @@ export default class ShopDetailsScreen extends ValidationComponent {
       })
       .then((responseJson) => {
         const found = responseJson.favourite_locations.some(v => (v.location_id === this.props.route.params.shopIdentifier))
-        this.setState({favourited: found, isLoading: false})
+        this.setState({ favourited: found, isLoading: false })
       });
     } catch (error) {
       console.error(error);
     }
+    return '';
   }
 
   favouriteLocation() {
@@ -121,7 +120,11 @@ export default class ShopDetailsScreen extends ValidationComponent {
     } catch (error) {
       console.error(error);
     }
+    return '';
+  }
 
+  navigateToShopReviews() {
+    this.props.navigation.navigate('ShopReviews', {shopData: this.state.shopData} )
   }
 
   render() {
@@ -131,9 +134,9 @@ export default class ShopDetailsScreen extends ValidationComponent {
       );
     } 
     return (
-      <ScrollView style={{ flex: 1, backgroundColor: '#845D3E' }}>
+      <View style={{ flex: 1, backgroundColor: '#845D3E' }}>
 
-        <View style={{ flex: 8, flexDirection: 'row', marginTop: '2%' }}> 
+        <View style={{ flex: 2, flexDirection: 'row', marginTop: '15%' }}> 
           
           <View style={{ flex: 3, alignItems: 'center', justifyContent:'center' }}> 
             <Text style={commonStyles.titleText}>{this.state.shopData.location_name}</Text>
@@ -143,14 +146,14 @@ export default class ShopDetailsScreen extends ValidationComponent {
           <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center'}}> 
             <Image
             source={{ uri : this.state.shopData.photo_path }}
-            style={{ width: 120, height: 120 }}/>
+            style={{ width: 120, height: 120, }}/>
           </View>
         </View>
 
         <Divider style={{ backgroundColor: 'black' }} />
         
 
-        <View style={{ flex: 4, justifyContent:'center' }}> 
+        <View style={{ flex: 3, justifyContent:'center' }}> 
           <Text style={commonStyles.headerStyle}>Ratings</Text>
           <View style={commonStyles.ratingItemStyle}>
             <Text>Average Overall Rating: {this.state.shopData.avg_overall_rating}</Text>
@@ -173,40 +176,31 @@ export default class ShopDetailsScreen extends ValidationComponent {
           </View>
         </View>
 
-        <Divider style={{ backgroundColor: 'black', marginTop: 10 }} />
+        <Divider style={{ backgroundColor: 'black', marginTop: '5%' }} />
 
-        {/* favourite this location, view reviews */}
-
-        <View>
-
-        <CheckBox
-          center
-          checked={this.state.favourited}
-          checkedColor="#F00"
-          checkedIcon="heart"
-          checkedTitle="Favourited"
-          containerStyle={{ marginLeft: '5%', width:'90%', backgroundColor: '#ECD2C7', marginTop: '5%'}}
-          iconLeft
-          onIconPress={() => console.log("onIconPress()")}
-          onLongIconPress={() =>
-            console.log("onLongIconPress()")
-          }
-          onLongPress={() => console.log("onLongPress()")}
-          onPress={() => this.favouriteLocation()} // checked = true
-          size={20}
-          textStyle={{}}
-          title="Favourite this location"
-          titleProps={{}}
-          uncheckedColor="#F00"
-          uncheckedIcon="heart-o"
-        />
+        <View style={{flex: 3, flexDirection: 'column', justifyContent: 'center'}}>
+          <CheckBox
+            center
+            checked={this.state.favourited}
+            checkedColor="#F00"
+            checkedIcon="heart"
+            checkedTitle="Favourited"
+            containerStyle={{ marginLeft: '5%', width:'90%', backgroundColor: '#ECD2C7', marginTop: '5%', border: 'none'}}
+            iconLeft
+            onPress={() => this.favouriteLocation()}
+            size={20}
+            textStyle={{ color: '#36222D', fontSize: 16 }}
+            title="Favourite this location"
+            uncheckedColor="#F00"
+            uncheckedIcon="heart-o"
+          />
           <Button title="View Reviews" buttonStyle={{
               width: '90%', backgroundColor: '#ECD2C7', marginTop:'5%', marginLeft: '5%'
             }}
-            titleStyle={{ color: '#36222D', textAlign: 'center' }} onPress={() => console.log("favourite")}
-          />
+            titleStyle={{ color: '#36222D', textAlign: 'center' }} onPress={() => this.navigateToShopReviews()}
+        />
         </View>
-      </ScrollView>
+      </View>
     );
   }
 

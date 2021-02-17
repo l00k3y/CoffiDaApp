@@ -31,6 +31,11 @@ const commonStyles = StyleSheet.create({
     borderRadius: 8,
     padding: '1%',
   },
+  headerTextStyle: {
+    color: "black", 
+    fontWeight: 'bold', 
+    fontSize: 20,
+  },
   headerStyle: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -46,8 +51,14 @@ const commonStyles = StyleSheet.create({
     paddingTop: 15, 
     paddingHorizontal: 10, 
     flexDirection: "row", 
-    justifyContent:'center', 
+    justifyContent: 'center', 
     alignItems: "center"
+  },
+  alignItemsVertically: {
+    flex: 0, 
+    flexDirection: "row", 
+    justifyContent: 'center', 
+    alignItems: 'center',
   },
 });
 

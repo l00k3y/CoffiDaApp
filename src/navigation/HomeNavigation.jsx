@@ -14,7 +14,6 @@ export default function HomeNav() {
       <Drawer.Screen name="List Coffee Shops" component={CoffeeShopNav} />
       {/* <Tab.Screen name="List" component={MainScreen} /> */}
       <Drawer.Screen name="Profile" component={ProfileNav} />
-      {/* <Tab.Screen name="About" component={MainScreen} /> */}
     </Drawer.Navigator>
 
   );

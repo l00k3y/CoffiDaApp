@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
-import { Button, ListItem, AirbnbRating } from 'react-native-elements';
+import { ListItem, AirbnbRating, Header, Icon } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import { commonStyles } from '../../styles/common';
 import { getSessionData } from '../../utils/LoginHelper';
@@ -25,6 +25,8 @@ export default class ListShopScreen extends Component {
       this.setState({ loginObject: x });
       this.getData();
     });
+
+    // check if route.params. contains searchResults, if so set shopData to searchResults route param
   }
 
   getData = async () => {
@@ -57,7 +59,18 @@ export default class ListShopScreen extends Component {
     }
     return (
       <View style={{ flex: 1, backgroundColor: '#845D3E' }} contentContainerStyle={{ justifyContent: 'space-evenly', alignItems: 'center' }}>
-        <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', padding: '2%' }}>Tap an item for more info</Text>
+        <Header
+            barStyle="default"
+            centerComponent={{
+              text: `All Coffee Shops`,
+              style: { color: "black", fontWeight: 'bold', fontSize: 20 }
+            }}
+            containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
+            placement="center"
+            rightComponent={<Icon name="search" size={30} type="FontAwesome" onPress={() => console.log("addReview")} /> }
+          />
+
+        <Text style={{ textAlign: 'center', padding: '2%' }}>Tap an item for more info</Text>
         <FlatList
             style={commonStyles.contentStyle}
             data={this.state.shopData}

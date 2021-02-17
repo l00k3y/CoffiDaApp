@@ -3,6 +3,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import ListShopScreen from '../screens/coffeeShops/ListShopScreen'
 import ShopDetailsScreen from '../screens/coffeeShops/ShopDetailsScreen';
+import ShopReviewsScreen from '../screens/coffeeShops/ShopReviewsScreen';
+import AddReviewScreen from '../screens/coffeeShops/AddReviewScreen';
 
 const Stack = createStackNavigator();
 
@@ -13,7 +15,10 @@ export default function CoffeeShopNav() {
       screenOptions={{ headerStyle: { backgroundColor: '#ECD2C7', elevation: 0 } }}
     >
       <Stack.Screen name="ListShops" component={ListShopScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="ShopDetails" component={ShopDetailsScreen} options={{ headerTitleAlign: 'center', headerTitle: 'Coffee Shop Details'}} />
+      <Stack.Screen name="ShopDetails" component={ShopDetailsScreen} options={{ headerShown: false }} />
+      {/* headerTitleAlign: 'center', headerTitle: 'Coffee Shop Details' */}
+      <Stack.Screen name="ShopReviews" component={ShopReviewsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="AddReview" component={AddReviewScreen} options={{headerShown: false}} />
     </Stack.Navigator>
   );
 }

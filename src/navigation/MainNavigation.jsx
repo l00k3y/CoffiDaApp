@@ -8,11 +8,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import SignUpOrLoginScreen from '../screens/SignUpOrLoginScreen';
-// import LoadingScreen from './src/screens/LoadingScreen';
 
 import MainNav from './HomeNavigation';
-
-// import MainScreen from '../screens/MainScreen';
 
 const Stack = createStackNavigator();
 

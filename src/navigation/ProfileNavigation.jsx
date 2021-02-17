@@ -8,9 +8,7 @@ import UpdateProfileScreen from '../screens/profile/UpdateProfile';
 const Stack = createStackNavigator();
 
 export default function ProfileNav() {
-  //   const navigation = this.props.navigation;
   return (
-  //   this.navigation.navigate('nextScreen')/
     <Stack.Navigator
       initialRouteName="Profile"
       screenOptions={{ headerStyle: { backgroundColor: '#ECD2C7', elevation: 0 } }}
