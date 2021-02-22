@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 import {
   Button, Image, Divider, CheckBox,
 } from 'react-native-elements';

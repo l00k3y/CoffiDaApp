@@ -53,12 +53,12 @@ function CoffeeShopItemComponent(props) {
   );
 }
 
-CoffeeShopItemComponent.propTypes = {
-  avg_overall_rating: PropTypes.number.isRequired,
-  location_town: PropTypes.string.isRequired,
-  location_name: PropTypes.string.isRequired,
-  location_id: PropTypes.number.isRequired,
-  profile: PropTypes.bool,
-};
+// CoffeeShopItemComponent.propTypes = {
+//   avg_overall_rating: PropTypes.number.isRequired,
+//   location_town: PropTypes.string.isRequired,
+//   location_name: PropTypes.string.isRequired,
+//   location_id: PropTypes.number.isRequired,
+//   profile: PropTypes.bool,
+// };
 
 export default CoffeeShopItemComponent;

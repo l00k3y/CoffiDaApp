@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
 import { View, ToastAndroid } from 'react-native';
 import { Button, Image } from 'react-native-elements';

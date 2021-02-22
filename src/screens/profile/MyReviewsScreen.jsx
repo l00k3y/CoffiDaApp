@@ -1,17 +1,17 @@
-import React from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
+import React, { Component } from 'react';
 import {
-  ListItem, AirbnbRating, Header,
+  View, ToastAndroid, FlatList, Text, TouchableHighlight,
+} from 'react-native';
+import {
+  Button, Image, Header, Icon, ListItem,
 } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import ValidationComponent from 'react-native-form-validator';
 import { getSessionData } from '../../utils/LoginHelper';
-import LoadingScreen from '../LoadingScreen';
 import { commonStyles } from '../../styles/common';
-import ReviewItemComponent from '../../components/ReviewComponent';
+import ReviewItemComponent from '../../components/CoffeeShopItemComponent';
 
-export default class ShopReviewsScreen extends ValidationComponent {
+import LoadingScreen from '../LoadingScreen';
+
+export default class ProfileScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -37,17 +37,17 @@ export default class ShopReviewsScreen extends ValidationComponent {
   }
 
   componentWillUnmount() {
-  // Remove the event listener
+    // Remove the event listener
     if (this.focusListener != null && this.focusListener.remove) {
       this.focusListener.remove();
     }
   }
 
   populatePage() {
-    // get reviews for location ID to fix no update bug
-    // this.setState({ shopData: this.props.route.params.shopIdentifier, isLoading: false });
+  // get reviews for location ID to fix no update bug
+  // this.setState({ shopData: this.props.route.params.shopIdentifier, isLoading: false });
     try {
-      return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${this.props.route.params.shopIdentifier}`, {
+      return fetch('http://10.0.2.2:3333/api/1.0.0/search_in?=reviewed', {
         headers: {
           'Content-Type': 'application/json',
           'X-Authorization': this.state.loginObject.token,
@@ -56,15 +56,17 @@ export default class ShopReviewsScreen extends ValidationComponent {
         .then((response) => {
           if (response.status === 200) {
             return response.json();
-          } if (response.status === 404) {
-            throw new Error('Not found');
+          } if (response.status === 400) {
+            throw new Error('Bad Request');
+          } else if (response.status === 401) {
+            throw new Error('Unauthorised Request');
           } else {
             throw new Error('Server error');
           }
         })
         .then((responseJson) => {
-        // populate page
-        // set state of relevant data
+          // populate page
+          // set state of relevant data
           this.setState({ shopData: responseJson, isLoading: false });
         });
     } catch (error) {
@@ -73,12 +75,9 @@ export default class ShopReviewsScreen extends ValidationComponent {
     return '';
   }
 
-  navigateToAddReview() {
-    this.props.navigation.navigate('AddReview', { revShopData: this.state.shopData });
-  }
-
   render() {
-    if (this.state.isLoading === true) {
+    const stateEles = this.state;
+    if (stateEles.isLoading === true) {
       return (
         <LoadingScreen />
       );
@@ -88,7 +87,7 @@ export default class ShopReviewsScreen extends ValidationComponent {
         <Header
           barStyle="default"
           centerComponent={{
-            text: `${this.state.shopData.location_name} Reviews`,
+            text: `${stateEles.shopData.location_name} Reviews`,
             style: { color: 'black', fontWeight: 'bold', fontSize: 20 },
           }}
           containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
@@ -100,8 +99,8 @@ export default class ShopReviewsScreen extends ValidationComponent {
 
           <Text style={{ textAlign: 'center', paddingVertical: 10 }}>Tap a review for photos and more information</Text>
           <FlatList
-            data={this.state.shopData.location_reviews}
-            renderItem={({ item }) => (<ReviewItemComponent review_data={item} shopID={this.props.route.params.shopIdentifier} />)}
+            data={stateEles.shopData.location_reviews}
+            renderItem={({ item }) => (<ReviewItemComponent review_data={item.props} review_body={item.review_body} />)}
             keyExtractor={(item) => item.review_id.toString()}
           />
         </View>
