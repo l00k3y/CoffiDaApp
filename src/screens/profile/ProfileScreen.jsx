@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { View, ToastAndroid } from 'react-native';
 import { Button, Image } from 'react-native-elements';
 import { getSessionData, clearSessionData } from '../../utils/LoginHelper';
-import { commonStyles } from "../../styles/common";
+import { commonStyles } from '../../styles/common';
 
 export default class ProfileScreen extends Component {
   constructor(props) {
@@ -51,19 +51,19 @@ export default class ProfileScreen extends Component {
     return (
       <View style={commonStyles.mainView}>
         <View style={commonStyles.mainContentView}>
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Image
-                source={require('../../assets/images/transpLogo2.png')}
-                style={{ width: 150, height: 200 }}
-              />
+          <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+            <Image
+              source={require('../../assets/images/transpLogo2.png')}
+              style={{ width: 150, height: 200 }}
+            />
           </View>
-        <Button
+          <Button
             title="My Reviews"
             buttonStyle={{
               width: '100%', backgroundColor: '#ECD2C7', marginTop: '10%',
             }}
             titleStyle={{ color: '#36222D', textAlign: 'center' }}
-            onPress={() => console.log("")}
+            onPress={() => console.log('')}
           />
 
           <Button
@@ -72,9 +72,8 @@ export default class ProfileScreen extends Component {
               width: '100%', backgroundColor: '#ECD2C7', marginTop: '10%',
             }}
             titleStyle={{ color: '#36222D', textAlign: 'center' }}
-            onPress={() => console.log("")}
+            onPress={() => navigation.navigate('FavouriteLocations')}
           />
-
 
           <Button
             title="Update Profile"
@@ -95,7 +94,7 @@ export default class ProfileScreen extends Component {
           />
         </View>
       </View>
-      
+
     );
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import ListShopScreen from '../screens/coffeeShops/ListShopScreen'
+import ListShopScreen from '../screens/coffeeShops/ListShopScreen';
 import ShopDetailsScreen from '../screens/coffeeShops/ShopDetailsScreen';
 import ShopReviewsScreen from '../screens/coffeeShops/ShopReviewsScreen';
 import AddReviewScreen from '../screens/coffeeShops/AddReviewScreen';
@@ -18,7 +18,7 @@ export default function CoffeeShopNav() {
       <Stack.Screen name="ShopDetails" component={ShopDetailsScreen} options={{ headerShown: false }} />
       {/* headerTitleAlign: 'center', headerTitle: 'Coffee Shop Details' */}
       <Stack.Screen name="ShopReviews" component={ShopReviewsScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="AddReview" component={AddReviewScreen} options={{headerShown: false}} />
+      <Stack.Screen name="AddReview" component={AddReviewScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

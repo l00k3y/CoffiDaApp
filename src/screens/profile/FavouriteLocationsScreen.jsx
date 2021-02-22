@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { Header, Icon } from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 import { commonStyles } from '../../styles/common';
 import { getSessionData } from '../../utils/LoginHelper';
@@ -8,7 +8,7 @@ import CoffeeShopItemComponent from '../../components/CoffeeShopItemComponent';
 
 import LoadingScreen from '../LoadingScreen';
 
-export default class ListShopScreen extends Component {
+export default class FavouriteLocationsScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -20,20 +20,27 @@ export default class ListShopScreen extends Component {
   }
 
   componentDidMount() {
-    getSessionData()
-      .then((x) => {
-        this.setState({ loginObject: x });
-        this.getData();
-      });
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('focus', () => {
+      getSessionData()
+        .then((x) => {
+          this.setState({ loginObject: x });
+          this.getData();
+        });
+    });
+  }
 
-    // check if route.params. contains searchResults,
-    // if so set shopData to searchResults route param
+  componentWillUnmount() {
+  // Remove the event listener
+    if (this.focusListener != null && this.focusListener.remove) {
+      this.focusListener.remove();
+    }
   }
 
   getData = async () => {
     const stateEles = this.state;
     try {
-      const response = await fetch('http://10.0.2.2:3333/api/1.0.0/find', {
+      const response = await fetch('http://10.0.2.2:3333/api/1.0.0/find?search_in=favourite', {
         headers: {
           'Content-Type': 'application/json',
           'X-Authorization': stateEles.loginObject.token,
@@ -61,14 +68,12 @@ export default class ListShopScreen extends Component {
         <Header
           barStyle="default"
           centerComponent={{
-            text: 'All Coffee Shops',
+            text: 'My Favourite Locations',
             style: { color: 'black', fontWeight: 'bold', fontSize: 20 },
           }}
           containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
           placement="center"
-          rightComponent={<Icon name="search" size={30} type="FontAwesome" onPress={() => console.log('addReview')} />}
         />
-
         <Text style={{ textAlign: 'center', padding: '2%' }}>Tap an item for more info</Text>
         <FlatList
           style={commonStyles.contentStyle}
@@ -79,6 +84,7 @@ export default class ListShopScreen extends Component {
               location_name={item.location_name}
               location_town={item.location_town}
               avg_overall_rating={item.avg_overall_rating}
+              profile
             />
           )}
           keyExtractor={(item) => item.location_id.toString()}

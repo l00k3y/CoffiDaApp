@@ -29,7 +29,7 @@ export default class UpdateProfileScreen extends ValidationComponent {
       lastName: { required: true },
       email: { required: true, email: true },
       password: { required: true, minlength: 6 },
-      confirmPass: { required: true, equalPassword: this.state.password }
+      confirmPass: { required: true, equalPassword: this.state.password },
     });
   }
 
@@ -76,8 +76,7 @@ export default class UpdateProfileScreen extends ValidationComponent {
   }
 
   async updateProfile() {
-
-    this.onSubmit()
+    this.onSubmit();
     if (this.isFormValid()) {
       try {
         const response = await fetch(`http://10.0.2.2:3333/api/1.0.0/user/${this.state.loginObject.id}`, {
@@ -105,8 +104,8 @@ export default class UpdateProfileScreen extends ValidationComponent {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       }
     } if (!this.isFormValid()) {
-      ToastAndroid.show(this.getErrorMessages("\n"), ToastAndroid.SHORT);
-    } 
+      ToastAndroid.show(this.getErrorMessages('\n'), ToastAndroid.SHORT);
+    }
   }
 
   populateForm() {
@@ -116,26 +115,26 @@ export default class UpdateProfileScreen extends ValidationComponent {
           'X-Authorization': this.state.loginObject.token,
         },
       })
-      .then( (response) => {
-        if (response.status === 200) {
-          return response.json();
-        } if (response.status === 401) {
-          ToastAndroid.show('Unauthorised request', ToastAndroid.SHORT);
-        } else if (response.status === 404) {
-          ToastAndroid.show('User not found', ToastAndroid.SHORT);
-        } else {
-          ToastAndroid.show('Server error', ToastAndroid.SHORT);
-        } return '';
-      })
-      .then((responseJson) => {
-        this.setState({
-          originalUser: responseJson,
-          firstName: responseJson.first_name,
-          lastName: responseJson.last_name,
-          email: responseJson.email,
-          isLoading: false,
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } if (response.status === 401) {
+            ToastAndroid.show('Unauthorised request', ToastAndroid.SHORT);
+          } else if (response.status === 404) {
+            ToastAndroid.show('User not found', ToastAndroid.SHORT);
+          } else {
+            ToastAndroid.show('Server error', ToastAndroid.SHORT);
+          } return '';
+        })
+        .then((responseJson) => {
+          this.setState({
+            originalUser: responseJson,
+            firstName: responseJson.first_name,
+            lastName: responseJson.last_name,
+            email: responseJson.email,
+            isLoading: false,
+          });
         });
-      });
     } catch (error) {
       ToastAndroid.show(error, ToastAndroid.SHORT);
     }

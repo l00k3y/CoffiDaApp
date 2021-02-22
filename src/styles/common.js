@@ -32,8 +32,8 @@ const commonStyles = StyleSheet.create({
     padding: '1%',
   },
   headerTextStyle: {
-    color: "black", 
-    fontWeight: 'bold', 
+    color: 'black',
+    fontWeight: 'bold',
     fontSize: 20,
   },
   headerStyle: {
@@ -43,21 +43,21 @@ const commonStyles = StyleSheet.create({
     paddingTop: 10,
   },
   contentStyle: {
-    width: '90%', 
+    width: '90%',
     marginLeft: '5%',
   },
   ratingItemStyle: {
-    flex: 1, 
-    paddingTop: 15, 
-    paddingHorizontal: 10, 
-    flexDirection: "row", 
-    justifyContent: 'center', 
-    alignItems: "center"
+    flex: 1,
+    paddingTop: 15,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   alignItemsVertically: {
-    flex: 0, 
-    flexDirection: "row", 
-    justifyContent: 'center', 
+    flex: 0,
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });

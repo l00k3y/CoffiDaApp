@@ -1,73 +1,112 @@
 import React from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import { Button, Image, Divider, CheckBox, ListItem, AirbnbRating, Header } from 'react-native-elements';
+import { FlatList } from 'react-native-gesture-handler';
+import {
+  ListItem, AirbnbRating, Header,
+} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import ValidationComponent from 'react-native-form-validator';
 import { getSessionData } from '../../utils/LoginHelper';
 import LoadingScreen from '../LoadingScreen';
-import { commonStyles } from "../../styles/common";
+import { commonStyles } from '../../styles/common';
 
 export default class ShopReviewsScreen extends ValidationComponent {
-
   constructor(props) {
     super(props);
 
     this.state = {
-        isLoading: true,
-        shopData: {},
-        loginObject: {},
-        favourited: false,
-        favouriteLocations: {},
-      };
-    }
+      isLoading: true,
+      shopData: {},
+      reviews: {},
+      loginObject: {},
+      favourited: false,
+      favouriteLocations: {},
+    };
+  }
 
   componentDidMount() {
-    getSessionData()
-    .then((x) => {
-      this.setState({ loginObject: x })
-      this.populatePage();
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('focus', () => {
+      getSessionData()
+        .then((x) => {
+          this.setState({ loginObject: x });
+          this.populatePage();
+        });
     });
   }
 
+  componentWillUnmount() {
+  // Remove the event listener
+    if (this.focusListener != null && this.focusListener.remove) {
+      this.focusListener.remove();
+    }
+  }
+
   populatePage() {
-    this.setState({shopData: this.props.route.params.shopData, isLoading: false})
+    // get reviews for location ID to fix no update bug
+    // this.setState({ shopData: this.props.route.params.shopIdentifier, isLoading: false });
+    try {
+      return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${this.props.route.params.shopIdentifier}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Authorization': this.state.loginObject.token,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } if (response.status === 404) {
+            throw new Error('Not found');
+          } else {
+            throw new Error('Server error');
+          }
+        })
+        .then((responseJson) => {
+        // populate page
+        // set state of relevant data
+          this.setState({ shopData: responseJson, isLoading: false });
+        });
+    } catch (error) {
+      console.error(error);
+    }
+    return '';
   }
 
   navigateToAddReview() {
-    this.props.navigation.navigate('AddReview', {revShopData: this.state.shopData});
+    this.props.navigation.navigate('AddReview', { revShopData: this.state.shopData });
   }
 
-    render() {
-      if (this.state.isLoading === true) {
-        return (
-          <LoadingScreen />
-        );
-      }
+  render() {
+    if (this.state.isLoading === true) {
       return (
-        <View style={commonStyles.mainView}>
-          <Header
-            barStyle="default"
-            centerComponent={{
-              text: `${this.state.shopData.location_name} Reviews`,
-              style: { color: "black", fontWeight: 'bold', fontSize: 20 }
-            }}
-            containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
-            placement="center" 
-            rightComponent={<Icon name="plus-box" size={30} type="MaterialCommunityIcons" onPress={() => this.navigateToAddReview()} />} />
+        <LoadingScreen />
+      );
+    }
+    return (
+      <View style={commonStyles.mainView}>
+        <Header
+          barStyle="default"
+          centerComponent={{
+            text: `${this.state.shopData.location_name} Reviews`,
+            style: { color: 'black', fontWeight: 'bold', fontSize: 20 },
+          }}
+          containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
+          placement="center"
+          rightComponent={<Icon name="plus-box" size={30} type="MaterialCommunityIcons" onPress={() => this.navigateToAddReview()} />}
+        />
 
-          <View style={commonStyles.mainContentView}>
+        <View style={commonStyles.mainContentView}>
 
-            <Text style={{textAlign: 'center', paddingVertical: 10}}>Tap a review for photos and more information</Text>
-            <FlatList
+          <Text style={{ textAlign: 'center', paddingVertical: 10 }}>Tap a review for photos and more information</Text>
+          <FlatList
             data={this.state.shopData.location_reviews}
-            renderItem={({item}) => 
+            renderItem={({ item }) => (
               <ListItem
                 bottomDivider
                 Component={TouchableHighlight}
-                containerStyle={{ backgroundColor: '#F6DFD7'}}
+                containerStyle={{ backgroundColor: '#F6DFD7' }}
                 disabledStyle={{ opacity: 0.5 }}
-                // onPress={() => this.loadShopDetails(item.location_id)}
+                onPress={() => console.log('test')}
                 pad={10}
                 topDivider
               >
@@ -82,11 +121,11 @@ export default class ShopReviewsScreen extends ValidationComponent {
                   count={5}
                   defaultRating={item.overall_rating}
                   reviews={[
-                    "Terrible",
-                    "Bad",
-                    "Okay",
-                    "Good",
-                    "Great"
+                    'Terrible',
+                    'Bad',
+                    'Okay',
+                    'Good',
+                    'Great',
                   ]}
                   showRating
                   isDisabled
@@ -97,7 +136,8 @@ export default class ShopReviewsScreen extends ValidationComponent {
                   checkedColor="#F00"
                   checkedIcon="heart"
                   checkedTitle=""
-                  containerStyle={{ marginLeft: '5%', width:'90%', backgroundColor: '#ECD2C7', marginTop: '5%', border: 'none'}}
+                  containerStyle={{ marginLeft: '5%', width:'90%', b
+                  ackgroundColor: '#ECD2C7', marginTop: '5%', border: 'none'}}
                   iconLeft
                   onPress={() => console.log('test')}
                   size={20}
@@ -108,8 +148,9 @@ export default class ShopReviewsScreen extends ValidationComponent {
                 /> */}
 
               </ListItem>
-            }
-            keyExtractor={(item) => item.review_id.toString()}/>
+            )}
+            keyExtractor={(item) => item.review_id.toString()}
+          />
         </View>
       </View>
     );
