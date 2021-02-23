@@ -25,7 +25,6 @@ export default class ReviewDetailsScreen extends Component {
       .then((x) => {
         // console.log(this.props.route.params.shopIdentifier);
         this.setState({ loginObject: x, reviewData: this.props.route.params.reviewData });
-        // check liked_reviews
         this.checkLikedReview();
         // check for photo
       });
@@ -65,11 +64,12 @@ export default class ReviewDetailsScreen extends Component {
   // } return '';
 
   checkLikedReview = () => {
+    const stateEles = this.state;
     try {
-      return fetch(`http://10.0.2.2:3333/api/1.0.0/user/${this.state.loginObject.id}`, {
+      return fetch(`http://10.0.2.2:3333/api/1.0.0/user/${stateEles.loginObject.id}`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-Authorization': this.state.loginObject.token,
+          'X-Authorization': stateEles.loginObject.token,
         },
       })
         .then((response) => {
@@ -86,8 +86,9 @@ export default class ReviewDetailsScreen extends Component {
           }
         })
         .then((responseJson) => {
-          const found = responseJson.liked_reviews.some((v) => (v.review.review_id === this.state.reviewData.review_id)); 
-          // console.log('test ' + this.state.reviewData.review_id);
+          const found = responseJson.liked_reviews.some(
+            (v) => (v.review.review_id === stateEles.reviewData.review_id),
+          );
           this.setState({ liked: found, isLoading: false });
         });
     } catch (error) {
@@ -100,8 +101,10 @@ export default class ReviewDetailsScreen extends Component {
     const stateEles = this.state;
     const propEles = this.props;
     let httpMethod = 'post';
+    let addOrTake = 1;
     if (stateEles.liked === true) {
       httpMethod = 'delete';
+      addOrTake = -1;
     }
     try {
       return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${propEles.route.params.shopIdentifier}/review/${stateEles.reviewData.review_id}/like`, {
@@ -113,6 +116,7 @@ export default class ReviewDetailsScreen extends Component {
       })
         .then((response) => {
           if (response.status === 200) {
+            stateEles.reviewData.likes += addOrTake;
             this.setState({ liked: !stateEles.liked });
           } else if (response.status === 400) {
             throw new Error('Bad request');
@@ -148,7 +152,7 @@ export default class ReviewDetailsScreen extends Component {
           }}
           containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
           placement="center"
-          rightComponent={<Icon name="content-save" size={30} type="MaterialCommunityIcons" onPress={() => this.addReview()} />}
+          rightComponent={<Icon name="refresh" size={30} type="MaterialCommunityIcons" onPress={() => this.componentDidMount()} />}
         />
 
         <View style={commonStyles.mainContentView}>
@@ -209,12 +213,12 @@ export default class ReviewDetailsScreen extends Component {
             <Text style={{ textAlign: 'center', paddingVertical: 10 }}>
               {stateEles.reviewData.likes}
               {' '}
-              likes
+              like(s)
             </Text>
 
             <CheckBox
               center
-              checked={this.state.liked}
+              checked={stateEles.liked}
               checkedColor="#F00"
               checkedIcon="heart"
               checkedTitle="Review liked"

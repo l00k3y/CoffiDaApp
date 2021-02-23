@@ -5,18 +5,15 @@ import { ListItem, AirbnbRating } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 
 function ReviewItemComponent(props) {
-  const navigation = useNavigation();
+  const reviewComponentNav = useNavigation();
   const propEles = props;
 
   function navigateToReviewDetails() {
-    // console.log(propEles);
-    navigation.navigate('ReviewDetails', { reviewData: propEles.review_data, shopIdentifier: propEles.shopID });
-    // console.log(props);
-    // if (props.profile) {
-    //   navigation.navigate('ProfileShopDetails', { reviewData: propEles });
-    // } else {
-    //   navigation.navigate('ShopDetails', { reviewData: propEles });
-    // }
+    if (props.update) {
+      reviewComponentNav.navigate('UpdateMyReview', { reviewData: propEles.review_data, shopIdentifier: propEles.shopID });
+    } else {
+      reviewComponentNav.navigate('ReviewDetails', { reviewData: propEles.review_data, shopIdentifier: propEles.shopID });
+    }
   }
 
   return (

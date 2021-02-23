@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import {
-  View, ToastAndroid, FlatList, Text, TouchableHighlight,
+  View, FlatList, Text,
 } from 'react-native';
 import {
-  Button, Image, Header, Icon, ListItem,
+  Header, Icon,
 } from 'react-native-elements';
 import { getSessionData } from '../../utils/LoginHelper';
 import { commonStyles } from '../../styles/common';
-import ReviewItemComponent from '../../components/CoffeeShopItemComponent';
+import ReviewItemComponent from '../../components/ReviewComponent';
 
 import LoadingScreen from '../LoadingScreen';
 
-export default class ProfileScreen extends Component {
+export default class MyReviewsScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -46,28 +46,28 @@ export default class ProfileScreen extends Component {
   populatePage() {
   // get reviews for location ID to fix no update bug
   // this.setState({ shopData: this.props.route.params.shopIdentifier, isLoading: false });
+    const stateEles = this.state;
     try {
-      return fetch('http://10.0.2.2:3333/api/1.0.0/search_in?=reviewed', {
+      return fetch(`http://10.0.2.2:3333/api/1.0.0/user/${stateEles.loginObject.id}`, {
         headers: {
           'Content-Type': 'application/json',
-          'X-Authorization': this.state.loginObject.token,
+          'X-Authorization': stateEles.loginObject.token,
         },
       })
         .then((response) => {
           if (response.status === 200) {
             return response.json();
-          } if (response.status === 400) {
-            throw new Error('Bad Request');
-          } else if (response.status === 401) {
+          } if (response.status === 401) {
             throw new Error('Unauthorised Request');
+          } else if (response.status === 401) {
+            throw new Error('Not found');
           } else {
             throw new Error('Server error');
           }
         })
         .then((responseJson) => {
-          // populate page
-          // set state of relevant data
-          this.setState({ shopData: responseJson, isLoading: false });
+          this.setState({ reviews: responseJson.reviews, isLoading: false });
+          console.log(stateEles.reviews);
         });
     } catch (error) {
       console.error(error);
@@ -87,21 +87,25 @@ export default class ProfileScreen extends Component {
         <Header
           barStyle="default"
           centerComponent={{
-            text: `${stateEles.shopData.location_name} Reviews`,
+            text: 'My Reviews',
             style: { color: 'black', fontWeight: 'bold', fontSize: 20 },
           }}
           containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
           placement="center"
-          rightComponent={<Icon name="plus-box" size={30} type="MaterialCommunityIcons" onPress={() => this.navigateToAddReview()} />}
+          // rightComponent={<Icon name="plus-box" size={30}
+          // type="MaterialCommunityIcons" onPress={() => this.navigateToAddReview()} />}
         />
 
         <View style={commonStyles.mainContentView}>
 
-          <Text style={{ textAlign: 'center', paddingVertical: 10 }}>Tap a review for photos and more information</Text>
+          <Text style={{ textAlign: 'center', paddingVertical: 10 }}>Tap a review to update or delete it</Text>
           <FlatList
-            data={stateEles.shopData.location_reviews}
-            renderItem={({ item }) => (<ReviewItemComponent review_data={item.props} review_body={item.review_body} />)}
-            keyExtractor={(item) => item.review_id.toString()}
+          // this.state.shopData.location_reviews
+            data={stateEles.reviews}
+            renderItem={({ item }) => (
+              <ReviewItemComponent review_data={item} shopID={item.location.location_id} update />)}
+              // <ReviewItemComponent review_data={item.props} review_body={item.review.review_body}  />)}
+            keyExtractor={(item) => item.review.review_id.toString()}
           />
         </View>
       </View>

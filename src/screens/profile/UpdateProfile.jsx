@@ -58,7 +58,7 @@ export default class UpdateProfileScreen extends ValidationComponent {
     this.setState({ confirmPass: pass });
   }
 
-  buildProfileDetails() {
+  buildReviewDetails() {
     const toSend = {};
     if (this.state.firstName !== this.state.originalUser.first_name) {
       toSend.first_name = this.state.firstName;

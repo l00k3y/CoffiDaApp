@@ -6,6 +6,8 @@ import UpdateProfileScreen from '../screens/profile/UpdateProfile';
 import FavouriteLocationsScreen from '../screens/profile/FavouriteLocationsScreen';
 import ShopDetailsScreen from '../screens/coffeeShops/ShopDetailsScreen';
 import ReviewDetailsScreen from '../screens/coffeeShops/ReviewDetailsScreen';
+import MyReviewsScreen from '../screens/profile/MyReviewsScreen';
+import UpdateMyReviewScreen from '../screens/profile/UpdateMyReviewScreen';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +24,8 @@ export default function ProfileNav() {
       <Stack.Screen name="FavouriteLocations" component={FavouriteLocationsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ProfileShopDetails" component={ShopDetailsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ProfReviewDetails" component={ReviewDetailsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="MyReviews" component={MyReviewsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="UpdateMyReview" component={UpdateMyReviewScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }

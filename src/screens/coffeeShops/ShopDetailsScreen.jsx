@@ -81,7 +81,9 @@ export default class ShopDetailsScreen extends ValidationComponent {
           }
         })
         .then((responseJson) => {
-          const found = responseJson.favourite_locations.some((v) => (v.location_id === this.props.route.params.shopIdentifier));
+          const found = responseJson.favourite_locations.some(
+            (v) => (v.location_id === this.props.route.params.shopIdentifier),
+          );
           this.setState({ favourited: found, isLoading: false });
         });
     } catch (error) {

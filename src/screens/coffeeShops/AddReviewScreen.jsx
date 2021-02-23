@@ -14,7 +14,6 @@ export default class AddReviewScreen extends ValidationComponent {
 
     this.state = {
       isLoading: true,
-      originalReviewData: {},
       reviewData: {},
       shopData: {},
       loginObject: {},

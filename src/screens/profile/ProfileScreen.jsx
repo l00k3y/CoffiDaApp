@@ -62,7 +62,7 @@ export default class ProfileScreen extends Component {
               width: '100%', backgroundColor: '#ECD2C7', marginTop: '10%',
             }}
             titleStyle={{ color: '#36222D', textAlign: 'center' }}
-            onPress={() => console.log('')}
+            onPress={() => navigation.navigate('MyReviews')}
           />
 
           <Button

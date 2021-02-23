@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TouchableHighlight } from 'react-native';
 import { ListItem, AirbnbRating } from 'react-native-elements';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
 
 function CoffeeShopItemComponent(props) {
