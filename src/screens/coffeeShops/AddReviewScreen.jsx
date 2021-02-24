@@ -5,8 +5,10 @@ import {
 } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import ValidationComponent from 'react-native-form-validator';
+import { ScrollView } from 'react-native-gesture-handler';
 import { getSessionData } from '../../utils/LoginHelper';
 import { commonStyles } from '../../styles/common';
+import textIsProfane from '../../utils/Strings';
 
 export default class AddReviewScreen extends ValidationComponent {
   constructor(props) {
@@ -15,6 +17,11 @@ export default class AddReviewScreen extends ValidationComponent {
     this.state = {
       isLoading: true,
       reviewData: {},
+      overallRating: 1,
+      priceRating: 1,
+      qualityRating: 1,
+      cleanlinessRating: 1,
+      reviewBody: '',
       shopData: {},
       loginObject: {},
     };
@@ -23,30 +30,45 @@ export default class AddReviewScreen extends ValidationComponent {
   componentDidMount() {
     getSessionData()
       .then((x) => {
-        // if find locations reviewed includes location id then send to update screen
-        // otherwise add review screen
-        // console.log(this.props.route.params.revShopData.location_id);
         this.state.shopData = this.props.route.params.revShopData;
-        console.log(this.state.shopData.location_id);
         this.setState({ loginObject: x });
-        //   this.checkFavouriteLocation();
-        //   this.populatePage();
       });
+  }
+
+  onSubmit() {
+    this.validate({
+      overallRating: { required: true },
+      priceRating: { required: true },
+      qualityRating: { required: true },
+      cleanlinessRating: { required: true },
+      reviewBody: { required: true },
+    });
+    if (this.isFormValid()) {
+      // check for bad words
+      const profaneFilter = textIsProfane(this.state.reviewBody);
+      if (profaneFilter) {
+        ToastAndroid.show('Please keep the review strictly about coffee', ToastAndroid.SHORT);
+        return false;
+      }
+      return true;
+    }
+    ToastAndroid.show(this.getErrorMessages('\n'), ToastAndroid.SHORT);
+    return false;
   }
 
   handleFinishRating(value, rating) {
     switch (rating) {
       case 'overall':
-        this.state.reviewData.overall_rating = value;
+        this.state.overallRating = value;
         break;
       case 'price':
-        this.state.reviewData.price_rating = value;
+        this.state.priceRating = value;
         break;
       case 'quality':
-        this.state.reviewData.quality_rating = value;
+        this.state.qualityRating = value;
         break;
       case 'cleanliness':
-        this.state.reviewData.clenliness_rating = value;
+        this.state.cleanlinessRating = value;
         break;
       default:
         break;
@@ -54,46 +76,57 @@ export default class AddReviewScreen extends ValidationComponent {
   }
 
   handleBodyInput = (inputBody) => {
-    this.state.reviewData.review_body = inputBody;
-    console.log(this.state.reviewData.review_body);
+    this.setState({ reviewBody: inputBody });
+  }
+
+  buildReviewDetails() {
+    const toSend = {};
+    const stateEles = this.state;
+    toSend.overall_rating = stateEles.overallRating;
+    toSend.price_rating = stateEles.priceRating;
+    toSend.quality_rating = stateEles.qualityRating;
+    toSend.clenliness_rating = stateEles.cleanlinessRating;
+    toSend.review_body = stateEles.reviewBody;
+    return toSend;
   }
 
   addReview = () => {
     // validate component
     // if.formIsValid() { }
-    console.log(`test ${this.state.shopData.locaton_id}`);
-
-    try {
-      return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${this.state.shopData.location_id}/review`, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Authorization': this.state.loginObject.token,
-        },
-        body: JSON.stringify(this.state.reviewData),
-      })
-        .then((response) => {
-          if (response.status === 201) {
-            ToastAndroid.show('Review added', ToastAndroid.SHORT);
-            this.props.navigation.goBack();
-          } else if (response.status === 400) {
-            ToastAndroid.show('Bad request', ToastAndroid.SHORT);
-          } else if (response.status === 401) {
-            ToastAndroid.show('Unauthorised request', ToastAndroid.SHORT);
-          } else if (response.status === 404) {
-            ToastAndroid.show('Location not found', ToastAndroid.SHORT);
-          } else {
-            ToastAndroid.show('Server error', ToastAndroid.SHORT);
-          } return '';
-        });
-    } catch (error) {
-      ToastAndroid.show(error, ToastAndroid.SHORT);
+    // console.log(`test ${this.state.shopData.locaton_id}`);
+    if (this.onSubmit()) {
+      try {
+        return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${this.state.shopData.location_id}/review`, {
+          method: 'post',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Authorization': this.state.loginObject.token,
+          },
+          body: JSON.stringify(this.buildReviewDetails()),
+        })
+          .then((response) => {
+            if (response.status === 201) {
+              ToastAndroid.show('Review added', ToastAndroid.SHORT);
+              this.props.navigation.goBack();
+            } else if (response.status === 400) {
+              ToastAndroid.show('Bad request', ToastAndroid.SHORT);
+            } else if (response.status === 401) {
+              ToastAndroid.show('Unauthorised request', ToastAndroid.SHORT);
+            } else if (response.status === 404) {
+              ToastAndroid.show('Location not found', ToastAndroid.SHORT);
+            } else {
+              ToastAndroid.show('Server error', ToastAndroid.SHORT);
+            } return '';
+          });
+      } catch (error) {
+        ToastAndroid.show(error, ToastAndroid.SHORT);
+      }
     } return '';
   }
 
   render() {
     return (
-      <View style={commonStyles.mainView}>
+      <ScrollView style={{ flex: 1, backgroundColor: '#845D3E' }} contentContainerStyle={{ justifyContent: 'space-evenly', alignItems: 'center' }}>
         <Header
           barStyle="default"
           centerComponent={{
@@ -107,7 +140,7 @@ export default class AddReviewScreen extends ValidationComponent {
 
         <View style={commonStyles.mainContentView}>
 
-          <View style={{ flex: 1, marginTop: '10%' }}>
+          <View style={{ flex: 1, marginTop: '4%' }}>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'baseline' }}>
               <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start' }}>
                 <Text>Overall</Text>
@@ -132,7 +165,10 @@ export default class AddReviewScreen extends ValidationComponent {
               </View>
             </View>
 
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'baseline' }}>
+            <View style={{
+              flex: 1, flexDirection: 'row', alignItems: 'baseline', marginTop: '5%',
+            }}
+            >
               <View style={{ flex: 1, flexDirection: 'column', alignItems: 'flex-start' }}>
                 <Text>Quality</Text>
                 <AirbnbRating
@@ -161,7 +197,7 @@ export default class AddReviewScreen extends ValidationComponent {
           <View style={{ flex: 3 }}>
             <Input
               placeholderTextColor="#36222D"
-              value={this.state.reviewData.review_body}
+              value={this.state.reviewBody}
               onChangeText={this.handleBodyInput}
               containerStyle={{ marginTop: '10%' }}
               disabledInputStyle={{ background: '#ddd' }}
@@ -181,7 +217,7 @@ export default class AddReviewScreen extends ValidationComponent {
             />
           </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }

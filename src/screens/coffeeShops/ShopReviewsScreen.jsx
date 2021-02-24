@@ -1,9 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
+import { View, Text } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
-import {
-  ListItem, AirbnbRating, Header,
-} from 'react-native-elements';
+import { Header } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import ValidationComponent from 'react-native-form-validator';
 import { getSessionData } from '../../utils/LoginHelper';
@@ -101,7 +99,12 @@ export default class ShopReviewsScreen extends ValidationComponent {
           <Text style={{ textAlign: 'center', paddingVertical: 10 }}>Tap a review for photos and more information</Text>
           <FlatList
             data={this.state.shopData.location_reviews}
-            renderItem={({ item }) => (<ReviewItemComponent review_data={item} shopID={this.props.route.params.shopIdentifier} />)}
+            renderItem={({ item }) => (
+              <ReviewItemComponent
+                review_data={item}
+                shopID={this.props.route.params.shopIdentifier}
+              />
+            )}
             keyExtractor={(item) => item.review_id.toString()}
           />
         </View>

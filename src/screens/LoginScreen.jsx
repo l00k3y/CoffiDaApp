@@ -38,7 +38,6 @@ export default class LoginScreen extends ValidationComponent {
       email: { required: true, email: true },
       password: { minlength: 5, required: true },
     });
-    console.log(this.getErrorMessages());
   }
 
   async login() {

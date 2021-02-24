@@ -8,6 +8,8 @@ import ValidationComponent from 'react-native-form-validator';
 import { ScrollView } from 'react-native-gesture-handler';
 import { getSessionData } from '../../utils/LoginHelper';
 import { commonStyles } from '../../styles/common';
+
+import textIsProfane from '../../utils/Strings';
 // import LoadingScreen from '../LoadingScreen';
 
 export default class UpdateMyReviewScreen extends ValidationComponent {
@@ -43,13 +45,6 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
   }
 
   onSubmit() {
-    /*
-      Issues with form validation library on objects means
-      I need to split the review object into individual fields
-      Ratings will only ever be 1-5 so no need for validation on them
-      reviewBody: '',
-    */
-    // this.state.reviewBody = this.state.reviewData.review_body;
     this.validate({
       overall_rating: 1,
       price_rating: 1,
@@ -57,6 +52,18 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
       clenliness_rating: 1,
       reviewBody: { required: true },
     });
+    if (this.isFormValid()) {
+      // check for bad words
+      const profaneFilter = textIsProfane(this.state.reviewBody);
+      console.log(profaneFilter);
+      if (profaneFilter) {
+        ToastAndroid.show('Please keep the review strictly about coffee', ToastAndroid.SHORT);
+        return false;
+      }
+      return true;
+    }
+    ToastAndroid.show(this.getErrorMessages('\n'), ToastAndroid.SHORT);
+    return false;
   }
 
   handleFinishRating(value, rating) {
@@ -76,8 +83,6 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
       default:
         break;
     }
-    // console.log(this.state.reviewData);
-    console.log(this.state.originalReviewData.overall_rating);
   }
 
   deleteReview = () => {
@@ -87,8 +92,7 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
 
   updateReview = () => {
     const stateEles = this.state;
-    this.onSubmit();
-    if (this.isFormValid()) {
+    if (this.onSubmit()) {
       try {
         return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${stateEles.locationData.location_id}/review/${stateEles.originalReviewData.review_id}`, {
           method: 'patch',
@@ -116,8 +120,6 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
       } catch (error) {
         ToastAndroid.show(error, ToastAndroid.SHORT);
       }
-    } else {
-      ToastAndroid.show(this.getErrorMessages('\n'), ToastAndroid.SHORT);
     } return '';
   }
 
@@ -145,16 +147,11 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
 
   deletePhoto = () => {
     // delete photo
+
   }
 
   handleBodyInput = (inputBody) => {
     this.setState({ reviewBody: inputBody });
-    // this.setState(() => ({
-    //   reviewData: {
-    //     ...this.state.reviewData,
-    //     reviewBody: inputBody,
-    //   },
-    // }));
   }
 
   render() {
