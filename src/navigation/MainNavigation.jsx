@@ -17,10 +17,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerTitle: '', headerStyle: { backgroundColor: '#845D3E', elevation: 0 } }}>
-        <Stack.Screen name="Home" component={SignUpOrLoginScreen} />
+        <Stack.Screen name="Landing" component={SignUpOrLoginScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="Main" component={MainNav} options={{ headerShown: false }} />
+        <Stack.Screen name="MainApp" component={MainNav} options={{ headerShown: false }} />
         {/* needs to be main navigator */}
       </Stack.Navigator>
     </NavigationContainer>

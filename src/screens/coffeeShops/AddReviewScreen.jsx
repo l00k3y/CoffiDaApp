@@ -44,7 +44,6 @@ export default class AddReviewScreen extends ValidationComponent {
       reviewBody: { required: true },
     });
     if (this.isFormValid()) {
-      // check for bad words
       const profaneFilter = textIsProfane(this.state.reviewBody);
       if (profaneFilter) {
         ToastAndroid.show('Please keep the review strictly about coffee', ToastAndroid.SHORT);
@@ -91,9 +90,6 @@ export default class AddReviewScreen extends ValidationComponent {
   }
 
   addReview = () => {
-    // validate component
-    // if.formIsValid() { }
-    // console.log(`test ${this.state.shopData.locaton_id}`);
     if (this.onSubmit()) {
       try {
         return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${this.state.shopData.location_id}/review`, {

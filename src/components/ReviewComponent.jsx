@@ -9,8 +9,10 @@ function ReviewItemComponent(props) {
   const propEles = props;
 
   function navigateToReviewDetails() {
-    if (props.update) {
-      reviewComponentNav.navigate('UpdateMyReview', { reviewData: propEles.review_data, shopIdentifier: propEles.shopID });
+    if (propEles.update) {
+      reviewComponentNav.navigate('UpdateMyReview', { reviewData: propEles.review_data, locationData: propEles.location_data, shopIdentifier: propEles.shopID });
+    } else if (propEles.profile) {
+      reviewComponentNav.navigate('ProfileReviewDetails', { reviewData: propEles.review_data, shopIdentifier: propEles.shopID });
     } else {
       reviewComponentNav.navigate('ReviewDetails', { reviewData: propEles.review_data, shopIdentifier: propEles.shopID });
     }

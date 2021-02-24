@@ -72,7 +72,32 @@ export default class ShopReviewsScreen extends ValidationComponent {
   }
 
   navigateToAddReview() {
-    this.props.navigation.navigate('AddReview', { revShopData: this.state.shopData });
+    if (this.props.route.params.profile) {
+      console.log('add review profile');
+      this.props.navigation.navigate('ProfileAddReview', { revShopData: this.state.shopData, profile: true });
+    } else {
+      this.props.navigation.navigate('AddReview', { revShopData: this.state.shopData });
+    }
+  }
+
+  returnCorrectReviewItem(currentItem) {
+    console.log('returnCorrectReviewItem ');
+    console.log(this.props.route.params);
+    if (this.props.route.params.profile) {
+      return (
+        <ReviewItemComponent
+          review_data={currentItem}
+          shopID={this.props.route.params.shopIdentifier}
+          profile
+        />
+      );
+    }
+    return (
+      <ReviewItemComponent
+        review_data={currentItem}
+        shopID={this.props.route.params.shopIdentifier}
+      />
+    );
   }
 
   render() {
@@ -99,12 +124,7 @@ export default class ShopReviewsScreen extends ValidationComponent {
           <Text style={{ textAlign: 'center', paddingVertical: 10 }}>Tap a review for photos and more information</Text>
           <FlatList
             data={this.state.shopData.location_reviews}
-            renderItem={({ item }) => (
-              <ReviewItemComponent
-                review_data={item}
-                shopID={this.props.route.params.shopIdentifier}
-              />
-            )}
+            renderItem={({ item }) => (this.returnCorrectReviewItem(item))}
             keyExtractor={(item) => item.review_id.toString()}
           />
         </View>

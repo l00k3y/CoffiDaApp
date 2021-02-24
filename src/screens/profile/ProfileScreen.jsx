@@ -21,17 +21,19 @@ export default class ProfileScreen extends Component {
   }
 
   logout() {
+    const prop = this.props;
+    const stateEles = this.state;
     return fetch('http://10.0.2.2:3333/api/1.0.0/user/logout', {
       method: 'post',
       headers: {
-        'X-Authorization': this.state.loginObject.token,
+        'X-Authorization': stateEles.loginObject.token,
       },
     })
       .then((response) => {
         if (response.status === 200) {
           clearSessionData();
           ToastAndroid.show('Goodbye!', ToastAndroid.SHORT);
-          this.props.navigation.navigate('Home');
+          prop.navigation.navigate('Landing');
         } else if (response.status === 401) {
           ToastAndroid.show("Weren't logged in anyway!", ToastAndroid.SHORT);
         } else {

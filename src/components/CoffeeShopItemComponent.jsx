@@ -9,8 +9,8 @@ function CoffeeShopItemComponent(props) {
   const propEles = props;
 
   function navigateToShopDetails() {
-    if (props.profile) {
-      navigation.navigate('ProfileShopDetails', { shopIdentifier: propEles.location_id });
+    if (propEles.profile) {
+      navigation.navigate('ProfileShopDetails', { shopIdentifier: propEles.location_id, profile: true });
     } else {
       navigation.navigate('ShopDetails', { shopIdentifier: propEles.location_id });
     }

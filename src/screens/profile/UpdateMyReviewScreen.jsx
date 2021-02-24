@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, ToastAndroid } from 'react-native';
+import {
+  View, Text, ToastAndroid, Alert,
+} from 'react-native';
 import {
   Header, AirbnbRating, Image, Button, Input,
 } from 'react-native-elements';
@@ -36,9 +38,9 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
         // console.log(this.props.route.params.shopIdentifier);
         this.setState({
           loginObject: x,
-          originalReviewData: this.props.route.params.reviewData.review,
-          reviewBody: this.props.route.params.reviewData.review.review_body,
-          locationData: this.props.route.params.reviewData.location,
+          originalReviewData: this.props.route.params.reviewData,
+          reviewBody: this.props.route.params.reviewData.review_body,
+          locationData: this.props.route.params.locationData,
         });
         // check for photo
       });
@@ -55,7 +57,6 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
     if (this.isFormValid()) {
       // check for bad words
       const profaneFilter = textIsProfane(this.state.reviewBody);
-      console.log(profaneFilter);
       if (profaneFilter) {
         ToastAndroid.show('Please keep the review strictly about coffee', ToastAndroid.SHORT);
         return false;
@@ -86,6 +87,33 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
   }
 
   deleteReview = () => {
+    const stateEles = this.state;
+    try {
+      return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${stateEles.locationData.location_id}/review/${stateEles.originalReviewData.review_id}`, {
+        method: 'delete',
+        headers: {
+          'X-Authorization': this.state.loginObject.token,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            ToastAndroid.show('Review deleted', ToastAndroid.SHORT);
+            this.props.navigation.goBack();
+          } else if (response.status === 400) {
+            ToastAndroid.show('Bad request', ToastAndroid.SHORT);
+          } else if (response.status === 401) {
+            ToastAndroid.show('Unauthorised request', ToastAndroid.SHORT);
+          } else if (response.status === 403) {
+            ToastAndroid.show('Forbidden request', ToastAndroid.SHORT);
+          } else if (response.status === 404) {
+            ToastAndroid.show('Not found', ToastAndroid.SHORT);
+          } else {
+            ToastAndroid.show('Server error', ToastAndroid.SHORT);
+          } return '';
+        });
+    } catch (error) {
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+    }
     // delete photo
     // delete review
   }
@@ -265,7 +293,22 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
               title="Delete Review"
               buttonStyle={{ width: '100%', backgroundColor: '#ECD2C7', marginTop: '5%' }}
               titleStyle={{ color: '#36222D', textAlign: 'center' }}
-              onPress={() => console.log('deleteReview')}
+              onPress={() => Alert.alert(
+                'Delete Review',
+                'Are you sure you want to delete your review?',
+                [
+                  {
+                    text: 'Yes',
+                    onPress: () => this.deleteReview(),
+                  },
+                  {
+                    text: 'No',
+                    // onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                  },
+                ],
+                { cancelable: false },
+              )}
             />
           </View>
         </View>

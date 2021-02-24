@@ -103,7 +103,7 @@ export default class MyReviewsScreen extends Component {
           // this.state.shopData.location_reviews
             data={stateEles.reviews}
             renderItem={({ item }) => (
-              <ReviewItemComponent review_data={item} shopID={item.location.location_id} update />)}
+              <ReviewItemComponent review_data={item.review} location_data={item.location} shopID={item.location.location_id} update />)}
               // <ReviewItemComponent review_data={item.props} review_body={item.review.review_body}  />)}
             keyExtractor={(item) => item.review.review_id.toString()}
           />

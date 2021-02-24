@@ -127,7 +127,11 @@ export default class ShopDetailsScreen extends ValidationComponent {
   }
 
   navigateToShopReviews() {
-    this.props.navigation.navigate('ShopReviews', { shopIdentifier: this.state.shopData.location_id });
+    if (this.props.route.params.profile) {
+      this.props.navigation.navigate('ProfileShopReviews', { shopIdentifier: this.state.shopData.location_id, profile: true });
+    } else {
+      this.props.navigation.navigate('ShopReviews', { shopIdentifier: this.state.shopData.location_id });
+    }
   }
 
   render() {

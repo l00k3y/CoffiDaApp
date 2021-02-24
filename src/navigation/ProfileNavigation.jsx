@@ -8,6 +8,8 @@ import ShopDetailsScreen from '../screens/coffeeShops/ShopDetailsScreen';
 import ReviewDetailsScreen from '../screens/coffeeShops/ReviewDetailsScreen';
 import MyReviewsScreen from '../screens/profile/MyReviewsScreen';
 import UpdateMyReviewScreen from '../screens/profile/UpdateMyReviewScreen';
+import ShopReviewsScreen from '../screens/coffeeShops/ShopReviewsScreen';
+import AddReviewScreen from '../screens/coffeeShops/AddReviewScreen';
 
 const Stack = createStackNavigator();
 
@@ -23,8 +25,10 @@ export default function ProfileNav() {
       <Stack.Screen name="UpdateProfile" component={UpdateProfileScreen} options={{ headerTitleAlign: 'center', headerTitle: 'Update Profile' }} />
       <Stack.Screen name="FavouriteLocations" component={FavouriteLocationsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ProfileShopDetails" component={ShopDetailsScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="ProfReviewDetails" component={ReviewDetailsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ProfileShopReviews" component={ShopReviewsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ProfileReviewDetails" component={ReviewDetailsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="MyReviews" component={MyReviewsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ProfileAddReview" component={AddReviewScreen} options={{ headerShown: false }} />
       <Stack.Screen name="UpdateMyReview" component={UpdateMyReviewScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
