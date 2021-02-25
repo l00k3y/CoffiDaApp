@@ -81,8 +81,6 @@ export default class ShopReviewsScreen extends ValidationComponent {
   }
 
   returnCorrectReviewItem(currentItem) {
-    console.log('returnCorrectReviewItem ');
-    console.log(this.props.route.params);
     if (this.props.route.params.profile) {
       return (
         <ReviewItemComponent

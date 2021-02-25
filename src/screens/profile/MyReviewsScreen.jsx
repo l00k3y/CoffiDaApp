@@ -67,7 +67,6 @@ export default class MyReviewsScreen extends Component {
         })
         .then((responseJson) => {
           this.setState({ reviews: responseJson.reviews, isLoading: false });
-          console.log(stateEles.reviews);
         });
     } catch (error) {
       console.error(error);

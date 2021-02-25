@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, ToastAndroid } from 'react-native';
-import {
-  Button, Header, AirbnbRating, Input,
-} from 'react-native-elements';
+import { Header, AirbnbRating, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import ValidationComponent from 'react-native-form-validator';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -126,7 +124,7 @@ export default class AddReviewScreen extends ValidationComponent {
         <Header
           barStyle="default"
           centerComponent={{
-            text: 'Add Review for ',
+            text: `Add Review for ${this.state.shopData.location_name}`,
             style: { color: 'black', fontWeight: 'bold', fontSize: 20 },
           }}
           containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
@@ -205,12 +203,17 @@ export default class AddReviewScreen extends ValidationComponent {
               placeholder="Great coffee"
             />
 
-            <Button
+            <Text>
+              To add a photo to your review,
+              save your review and add the photo from My Reviews in Profile
+            </Text>
+
+            {/* <Button
               title="Add Photo"
               buttonStyle={{ width: '100%', backgroundColor: '#ECD2C7', marginTop: '5%' }}
               titleStyle={{ color: '#36222D', textAlign: 'center' }}
               onPress={() => console.log('takePhoto')}
-            />
+            /> */}
           </View>
         </View>
       </ScrollView>

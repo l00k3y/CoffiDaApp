@@ -7,7 +7,7 @@ import {
 } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import ValidationComponent from 'react-native-form-validator';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TapGestureHandler } from 'react-native-gesture-handler';
 import { getSessionData } from '../../utils/LoginHelper';
 import { commonStyles } from '../../styles/common';
 
@@ -29,10 +29,13 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
       reviewBody: '',
       locationData: {},
       loginObject: {},
+      imageData: null,
+      // imageData: '',
     };
   }
 
   componentDidMount() {
+    // need to reload data on re-load of page
     getSessionData()
       .then((x) => {
         // console.log(this.props.route.params.shopIdentifier);
@@ -42,7 +45,7 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
           reviewBody: this.props.route.params.reviewData.review_body,
           locationData: this.props.route.params.locationData,
         });
-        // check for photo
+        this.getPhoto();
       });
   }
 
@@ -113,9 +116,7 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
         });
     } catch (error) {
       ToastAndroid.show(error, ToastAndroid.SHORT);
-    }
-    // delete photo
-    // delete review
+    } return '';
   }
 
   updateReview = () => {
@@ -168,14 +169,90 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
     }
     if (stateEles.reviewBody !== stateEles.originalReviewData.review_body) {
       toSend.review_body = stateEles.reviewBody;
-      // check if string contains profanity
     }
     return toSend;
   }
 
-  deletePhoto = () => {
-    // delete photo
+  getPhoto = () => {
+    const stateEles = this.state;
+    try {
+      return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${stateEles.locationData.location_id}/review/${stateEles.originalReviewData.review_id}/photo?timestamp=${Date.now()}`, {
+        headers: {
+          'Content-Type': 'image/jpeg',
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            ToastAndroid.show('Photo found', ToastAndroid.SHORT);
+            this.renderPhoto();
+          } else if (response.status === 404) {
+            ToastAndroid.show('Default photo shown', ToastAndroid.SHORT);
+            this.renderStockPhoto();
+          } else {
+            ToastAndroid.show('Server error', ToastAndroid.SHORT);
+          } return '';
+        });
+    } catch (error) {
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+    }
+  }
 
+  renderStockPhoto = () => {
+    let photo = null;
+    photo = (
+      <Image
+        // source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/4/45/A_small_cup_of_coffee.JPG' }}
+        source={require('../../assets/images/smallCoffee.jpg')}
+        style={{ height: 120, width: 120 }}
+      />
+    );
+    return photo;
+  }
+
+  renderPhoto = () => {
+    let photo = null;
+    const stateEles = this.state;
+    photo = (
+      <Image
+        source={{ uri: `http://10.0.2.2:3333/api/1.0.0/location/${stateEles.locationData.location_id}/review/${stateEles.originalReviewData.review_id}/photo?timestamp=${Date.now()}` }}
+        style={{ height: 120, width: 120 }}
+      />
+    );
+    return photo;
+  }
+
+  updatePhoto = () => {
+    const stateEles = this.state;
+    this.props.navigation.navigate('ProfileCamera', {
+      reviewID: stateEles.originalReviewData.review_id,
+      locationID: stateEles.locationData.location_id,
+      userToken: stateEles.loginObject.token,
+    });
+  }
+
+  deletePhoto = () => {
+    const stateEles = this.state;
+    try {
+      return fetch(`http://10.0.2.2:3333/api/1.0.0/location/${stateEles.locationData.location_id}/review/${stateEles.originalReviewData.review_id}/photo`, {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'image/jpeg',
+          'X-Authorization': this.state.loginObject.token,
+        },
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            ToastAndroid.show('Photo deleted', ToastAndroid.SHORT);
+            // this.setState({ imageData: null });
+          } else if (response.status === 404) {
+            ToastAndroid.show('No image found', ToastAndroid.SHORT);
+          } else {
+            ToastAndroid.show('Server error', ToastAndroid.SHORT);
+          } return '';
+        });
+    } catch (error) {
+      ToastAndroid.show(error, ToastAndroid.SHORT);
+    } return '';
   }
 
   handleBodyInput = (inputBody) => {
@@ -269,24 +346,21 @@ export default class UpdateMyReviewScreen extends ValidationComponent {
             />
 
             <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }}>
-              <Image
-                source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/4/45/A_small_cup_of_coffee.JPG' }}
-                style={{ width: 120, height: 120 }}
-              />
+              {this.renderPhoto()}
             </View>
 
             <Button
               title="Update Photo"
               buttonStyle={{ width: '100%', backgroundColor: '#ECD2C7', marginTop: '5%' }}
               titleStyle={{ color: '#36222D', textAlign: 'center' }}
-              onPress={() => console.log('updatePhoto')}
+              onPress={() => this.updatePhoto()}
             />
 
             <Button
               title="Delete Photo"
               buttonStyle={{ width: '100%', backgroundColor: '#ECD2C7', marginTop: '5%' }}
               titleStyle={{ color: '#36222D', textAlign: 'center' }}
-              onPress={() => console.log('deletePhoto')}
+              onPress={() => this.deletePhoto()}
             />
 
             <Button

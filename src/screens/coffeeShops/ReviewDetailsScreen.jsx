@@ -30,8 +30,6 @@ export default class ReviewDetailsScreen extends Component {
       });
   }
 
-  addReview = () => {
-  }
   // validate component
   // // if.formIsValid() { }
   // console.log(`test ${this.state.shopData.locaton_id}`);

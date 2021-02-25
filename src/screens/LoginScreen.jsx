@@ -51,30 +51,28 @@ export default class LoginScreen extends ValidationComponent {
         },
         body: JSON.stringify(this.state),
       })
-        .then((response) => {
+        .then(async (response) => {
           if (response.status === 200) {
-            return response.json();
-          } if (response.status === 400) {
-            throw new Error('Invalid credentials');
+            const responseJson = await response.json();
+            const loginObject = {};
+            loginObject.id = JSON.stringify(responseJson.id);
+            loginObject.token = responseJson.token;
+            setSessionData(loginObject);
+            this.props.navigation.navigate('MainApp');
+            ToastAndroid.show('Welcome', ToastAndroid.SHORT);
+          } else if (response.status === 400) {
+            ToastAndroid.show('Invalid credentials', ToastAndroid.SHORT);
           } else {
-            throw new Error('Server error');
+            ToastAndroid.show('Server error', ToastAndroid.SHORT);
           }
         })
-        .then(async (responseJson) => {
-          const loginObject = {};
-          loginObject.id = JSON.stringify(responseJson.id);
-          loginObject.token = responseJson.token;
-          setSessionData(loginObject);
-          console.log(loginObject.token);
-          this.props.navigation.navigate('MainApp');
-          ToastAndroid.show('Welcome', ToastAndroid.SHORT);
-        })
         .catch((error) => {
-          ToastAndroid.show(error, ToastAndroid.SHORT);
+          console.error(error);
         });
     }
     const errMessage = this.getErrorMessages('\n');
     ToastAndroid.show(errMessage, ToastAndroid.SHORT);
+    return '';
   }
 
   render() {

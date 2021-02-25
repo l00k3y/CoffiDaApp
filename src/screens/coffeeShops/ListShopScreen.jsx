@@ -33,21 +33,38 @@ export default class ListShopScreen extends Component {
   getData = async () => {
     const stateEles = this.state;
     try {
-      const response = await fetch('http://10.0.2.2:3333/api/1.0.0/find', {
+      fetch('http://10.0.2.2:3333/api/1.0.0/find', {
         headers: {
           'Content-Type': 'application/json',
           'X-Authorization': stateEles.loginObject.token,
         },
-      });
-      const responseJson = await response.json();
-      this.setState({
-        isLoading: false,
-        shopData: responseJson,
-      });
+      })
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json();
+          } if (response.status === 400) {
+            throw new Error('Bad request');
+          } else if (response.status === 401) {
+            throw new Error('Unauthorised request');
+          } else {
+            throw new Error('Server error');
+          }
+        })
+        .then((responseJson) => {
+          // populate page
+          // set state of relevant data
+          this.setState({ isLoading: false, shopData: responseJson });
+        });
     } catch (error) {
       console.log(error);
     }
   };
+
+  navigateToSearch() {
+    const propEles = this.props;
+    const stateEles = this.state;
+    propEles.navigation.navigate('SearchShops', { userToken: stateEles.loginObject.token });
+  }
 
   render() {
     const stateEles = this.state;
@@ -66,7 +83,7 @@ export default class ListShopScreen extends Component {
           }}
           containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
           placement="center"
-          rightComponent={<Icon name="search" size={30} type="FontAwesome" onPress={() => console.log('addReview')} />}
+          rightComponent={<Icon name="search" size={30} type="FontAwesome" onPress={() => this.navigateToSearch()} />}
         />
 
         <Text style={{ textAlign: 'center', padding: '2%' }}>Tap an item for more info</Text>

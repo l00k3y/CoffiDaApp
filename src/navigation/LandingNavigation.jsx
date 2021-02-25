@@ -9,7 +9,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import SignUpOrLoginScreen from '../screens/SignUpOrLoginScreen';
 
-import MainNav from './HomeNavigation';
+import MainNav from './MainAppNavigation';
 
 const Stack = createStackNavigator();
 

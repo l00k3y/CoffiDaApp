@@ -10,6 +10,7 @@ import MyReviewsScreen from '../screens/profile/MyReviewsScreen';
 import UpdateMyReviewScreen from '../screens/profile/UpdateMyReviewScreen';
 import ShopReviewsScreen from '../screens/coffeeShops/ShopReviewsScreen';
 import AddReviewScreen from '../screens/coffeeShops/AddReviewScreen';
+import CameraScreen from '../screens/camera/CameraScreen';
 
 const Stack = createStackNavigator();
 
@@ -30,6 +31,7 @@ export default function ProfileNav() {
       <Stack.Screen name="MyReviews" component={MyReviewsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ProfileAddReview" component={AddReviewScreen} options={{ headerShown: false }} />
       <Stack.Screen name="UpdateMyReview" component={UpdateMyReviewScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ProfileCamera" component={CameraScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
