@@ -57,6 +57,7 @@ export default class LoginScreen extends ValidationComponent {
             const loginObject = {};
             loginObject.id = JSON.stringify(responseJson.id);
             loginObject.token = responseJson.token;
+            console.log(loginObject.token);
             setSessionData(loginObject);
             this.props.navigation.navigate('MainApp');
             ToastAndroid.show('Welcome', ToastAndroid.SHORT);

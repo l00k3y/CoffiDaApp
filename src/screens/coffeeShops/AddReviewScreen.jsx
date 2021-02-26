@@ -124,7 +124,7 @@ export default class AddReviewScreen extends ValidationComponent {
         <Header
           barStyle="default"
           centerComponent={{
-            text: `Add Review for ${this.state.shopData.location_name}`,
+            text: 'Add Review',
             style: { color: 'black', fontWeight: 'bold', fontSize: 20 },
           }}
           containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}

@@ -28,7 +28,6 @@ export default class ListShopScreen extends Component {
           if (this.props.route.params.search === true) {
             // search results have been passed so load them
             this.setState({ shopData: this.props.route.params.shopData, isLoading: false });
-            this.props.route.params.search === false;
           } else {
             this.getData();
           }
@@ -39,7 +38,6 @@ export default class ListShopScreen extends Component {
   componentWillUnmount() {
     // Remove the event listener
     if (this.focusListener != null && this.focusListener.remove) {
-      this.setState({ shopData: {} });
       this.focusListener.remove();
     }
   }

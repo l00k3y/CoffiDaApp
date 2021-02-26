@@ -71,7 +71,7 @@ export default class SignUpScreen extends ValidationComponent {
             if (response.status === 201) {
               ToastAndroid.show('Please sign in', ToastAndroid.SHORT);
               this.props.navigation.navigate('Login', { email: this.state.email }); // pass email as prop
-            } if (response.status === 400) {
+            } else if (response.status === 400) {
               ToastAndroid.show('Validation failed', ToastAndroid.SHORT);
             } else {
               ToastAndroid.show('Server error', ToastAndroid.SHORT);
