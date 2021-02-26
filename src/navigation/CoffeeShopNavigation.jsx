@@ -17,7 +17,7 @@ export default function CoffeeShopNav() {
       initialRouteName="ListShops"
       screenOptions={{ headerStyle: { backgroundColor: '#ECD2C7', elevation: 0 } }}
     >
-      <Stack.Screen name="ListShops" component={ListShopScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ListShops" component={ListShopScreen} options={{ headerShown: false }} initialParams={{ search: false }} />
       <Stack.Screen name="ShopDetails" component={ShopDetailsScreen} options={{ headerShown: false }} />
       {/* headerTitleAlign: 'center', headerTitle: 'Coffee Shop Details' */}
       <Stack.Screen name="ShopReviews" component={ShopReviewsScreen} options={{ headerShown: false }} />

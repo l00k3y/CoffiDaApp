@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-import {
-  View, FlatList, Text,
-} from 'react-native';
-import {
-  Header, Icon,
-} from 'react-native-elements';
+import { View, FlatList, Text } from 'react-native';
+import { Header } from 'react-native-elements';
 import { getSessionData } from '../../utils/LoginHelper';
 import { commonStyles } from '../../styles/common';
 import ReviewItemComponent from '../../components/ReviewComponent';
@@ -17,11 +13,8 @@ export default class MyReviewsScreen extends Component {
 
     this.state = {
       isLoading: true,
-      shopData: {},
       reviews: {},
       loginObject: {},
-      favourited: false,
-      favouriteLocations: {},
     };
   }
 
@@ -91,19 +84,21 @@ export default class MyReviewsScreen extends Component {
           }}
           containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
           placement="center"
-          // rightComponent={<Icon name="plus-box" size={30}
-          // type="MaterialCommunityIcons" onPress={() => this.navigateToAddReview()} />}
         />
 
         <View style={commonStyles.mainContentView}>
 
           <Text style={{ textAlign: 'center', paddingVertical: 10 }}>Tap a review to update or delete it</Text>
           <FlatList
-          // this.state.shopData.location_reviews
             data={stateEles.reviews}
             renderItem={({ item }) => (
-              <ReviewItemComponent review_data={item.review} location_data={item.location} shopID={item.location.location_id} update />)}
-              // <ReviewItemComponent review_data={item.props} review_body={item.review.review_body}  />)}
+              <ReviewItemComponent
+                review_data={item.review}
+                location_data={item.location}
+                shopID={item.location.location_id}
+                update
+              />
+            )}
             keyExtractor={(item) => item.review.review_id.toString()}
           />
         </View>

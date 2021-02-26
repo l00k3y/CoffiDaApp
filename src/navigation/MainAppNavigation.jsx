@@ -10,9 +10,8 @@ const Drawer = createDrawerNavigator();
 export default function HomeNav() {
   return (
     <Drawer.Navigator initialRouteName="Map">
-      <Drawer.Screen name="Coffee Shop Map" component={MainScreen} />
-      <Drawer.Screen name="List Coffee Shops" component={CoffeeShopNav} />
-      {/* <Tab.Screen name="List" component={MainScreen} /> */}
+      <Drawer.Screen name="CoffeeShopMap" component={MainScreen} />
+      <Drawer.Screen name="ListCoffeeShops" component={CoffeeShopNav} />
       <Drawer.Screen name="Profile" component={ProfileNav} />
     </Drawer.Navigator>
 

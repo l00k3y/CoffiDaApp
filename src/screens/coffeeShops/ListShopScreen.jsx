@@ -20,14 +20,28 @@ export default class ListShopScreen extends Component {
   }
 
   componentDidMount() {
-    getSessionData()
-      .then((x) => {
-        this.setState({ loginObject: x });
-        this.getData();
-      });
+    const { navigation } = this.props;
+    this.focusListener = navigation.addListener('focus', () => {
+      getSessionData()
+        .then((x) => {
+          this.setState({ loginObject: x });
+          if (this.props.route.params.search === true) {
+            // search results have been passed so load them
+            this.setState({ shopData: this.props.route.params.shopData, isLoading: false });
+            this.props.route.params.search === false;
+          } else {
+            this.getData();
+          }
+        });
+    });
+  }
 
-    // check if route.params. contains searchResults,
-    // if so set shopData to searchResults route param
+  componentWillUnmount() {
+    // Remove the event listener
+    if (this.focusListener != null && this.focusListener.remove) {
+      this.setState({ shopData: {} });
+      this.focusListener.remove();
+    }
   }
 
   getData = async () => {
@@ -83,6 +97,7 @@ export default class ListShopScreen extends Component {
           }}
           containerStyle={{ width: '100%', backgroundColor: '#F6DFD7' }}
           placement="center"
+          leftComponent={<Icon name="clear-all" size={30} type="MaterialIcons" onPress={() => this.getData()} />}
           rightComponent={<Icon name="search" size={30} type="FontAwesome" onPress={() => this.navigateToSearch()} />}
         />
 
