@@ -58,7 +58,7 @@ export default class UpdateProfileScreen extends ValidationComponent {
     this.setState({ confirmPass: pass });
   }
 
-  buildReviewDetails() {
+  buildProfileDetails() {
     const toSend = {};
     if (this.state.firstName !== this.state.originalUser.first_name) {
       toSend.first_name = this.state.firstName;
@@ -69,7 +69,8 @@ export default class UpdateProfileScreen extends ValidationComponent {
     if (this.state.email !== this.state.originalUser.email) {
       toSend.email = this.state.email;
     }
-    if ((this.state.password !== this.state.originalUser.password) && (this.state.password === this.state.confirmPass)) {
+    if ((this.state.password !== this.state.originalUser.password)
+        && (this.state.password === this.state.confirmPass)) {
       toSend.password = this.state.password;
     }
     return toSend;

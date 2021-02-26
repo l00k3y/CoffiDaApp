@@ -62,7 +62,7 @@ export default class ShopMapScreen extends Component {
       .then((x) => {
         this.setState({ loginObject: x });
         this.findCoordinates();
-        this.getData();
+        // this.getData();
         // this.mapMarkers();
       });
   }
