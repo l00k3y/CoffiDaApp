@@ -1,4 +1,7 @@
 # CoffiDaApp
-Used eslint with Airbnb style
-React native form validator for validation
-Bad words JS library for profanity filter
+
+My coffee shop review application written in React Native.
+
+Includes Google Maps integration, form validation throughout and a profanity filter for any user submissions.
+
+Written to Airbnb's code style.
